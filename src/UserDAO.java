@@ -31,7 +31,7 @@ public class UserDAO {
 		ps.setString(2, user.getPassword());
 		ps.setString(3, user.getFirstName());
 		ps.setString(4, user.getLastName());
-		ps.setString(5, String.valueOf(user.getGender()));
+		ps.setString(5, user.getGender());
 		ps.setString(6, user.getBirthday());
 		
 		boolean tupleInserted = ps.executeUpdate() > 0;

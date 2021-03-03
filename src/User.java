@@ -1,10 +1,9 @@
 public class User {
-	private String username, password, firstName, lastName, birthday;
-	private char gender;
+	private String username, password, firstName, lastName, birthday, gender;
 
 	public User() {}
 
-	public User(String username, String password, String firstName, String lastName, char gender, String birthday) {
+	public User(String username, String password, String firstName, String lastName, String gender, String birthday) {
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -53,11 +52,11 @@ public class User {
 		this.birthday = birthday;
 	}
 
-	public char getGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(char gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 	

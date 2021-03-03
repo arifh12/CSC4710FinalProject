@@ -67,7 +67,7 @@ public class InitializeDB {
 				+ "    password varchar(40),"
 				+ "    first_name varchar(20),"
 				+ "    last_name varchar(20),"
-				+ "    gender char(1),"
+				+ "    gender char(6),"
 				+ "    birthday date,"
 				+ "    primary key(username)"
 				+ ");",
@@ -92,9 +92,9 @@ public class InitializeDB {
 	
 	public void populateTables() throws SQLException {
 		User[] testUsers = {
-				new User("arif123", "hasan456", "Arif", "Hasan", 'M', "2000-06-12"),
-				new User("ahtesamul123", "haque456", "Ahtesamul", "Haque", 'M', "2000-01-01"),
-				new User("psherman", "42wallabyway", "P.", "Sherman", 'M', "2003-05-30"),
+				new User("arif123@hasan.com", "hasan456", "Arif", "Hasan", "Male", "2000-06-12"),
+				new User("ahtesamul123", "haque456", "Ahtesamul", "Haque", "Male", "2000-01-01"),
+				new User("psherman", "42wallabyway", "P.", "Sherman", "Male", "2003-05-30"),
 		};
 		
 		UserDAO userDAO = new UserDAO();

@@ -20,7 +20,7 @@ var check = function() {
 </head>
 <body>
 	<h1>Registration Sign-up Form</h1>
-        <form action="regSuccess.jsp" method="post">
+        <form action="register" method="post">
             <table style="with: 100%">
 				<tr>
                     <td>First Name</td>

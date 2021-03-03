@@ -35,7 +35,10 @@ public class ControlServlet extends HttpServlet {
 				break;
 			case "/initialize":
 				db.initialize();
-				
+				response.sendRedirect("LoginForm.jsp");
+				break;
+			case "/register":
+				processRegister(request, response);
 				break;
 			default:
 				System.out.println("error");
@@ -51,12 +54,45 @@ public class ControlServlet extends HttpServlet {
 		
 		if(username.equalsIgnoreCase(USER_ROOT) && password.equalsIgnoreCase(PASS_ROOT)) {
 			response.sendRedirect("Initialization.jsp");
-		} else if (db.isInitialized()) 
+		} else if (db.isInitialized()) {
 			userDAO.login(username, password);
+			response.sendRedirect("LoginForm.jsp");
+		}
 		else 
 			System.out.println("*****DATABASE NOT INITIALIZED*****");
 		
 		System.out.println(username + " , " + password);
 	}
+	
+	private void processRegister(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		String firstName = request.getParameter("fname");
+		String lastName = request.getParameter("lname");
+		String birthday = request.getParameter("birthday");
+		String gender = request.getParameter("gender");
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		
+		User user = new User(username, password, firstName, lastName, gender, birthday);
+		
+		if(userDAO.insert(user)) {
+			System.out.println("***USER INSERTED SUCCESSFULLY***");
+			user.toString();
+		} else {
+			System.out.println("***USERNAME ALREADY EXISTS!***");
+		}
+		
+		response.sendRedirect("LoginForm.jsp");
+	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
