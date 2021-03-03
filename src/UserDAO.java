@@ -24,14 +24,14 @@ public class UserDAO {
 	}
 	
 	public boolean insert(User user) throws SQLException {
-		String query = "INSERT into user VALUES(?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT into user VALUES(?, ?, ?, ?, ?, ?)";
 		
-		ps = conn.prepareStatement(query);
+		ps = conn.prepareStatement(sql);
 		ps.setString(1, user.getUsername());
 		ps.setString(2, user.getPassword());
 		ps.setString(3, user.getFirstName());
 		ps.setString(4, user.getLastName());
-		ps.setString(5, user.getGender());
+		ps.setString(5, String.valueOf(user.getGender()));
 		ps.setString(6, user.getBirthday());
 		
 		boolean tupleInserted = ps.executeUpdate() > 0;
@@ -42,9 +42,9 @@ public class UserDAO {
 	
 	//TODO: make this class return a User object!!!!!
 	public boolean login(String username, String password) throws SQLException {
-		String query = "SELECT * FROM user WHERE username=? AND password=?";
+		String sql = "SELECT * FROM user WHERE username=? AND password=?";
 		
-		ps = conn.prepareStatement(query);
+		ps = conn.prepareStatement(sql);
 		ps.setString(1, username);
 		ps.setString(2, password);
 		

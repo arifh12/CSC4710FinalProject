@@ -1,5 +1,17 @@
 public class User {
-	private String username, password, firstName, lastName, birthday, gender;
+	private String username, password, firstName, lastName, birthday;
+	private char gender;
+
+	public User() {}
+
+	public User(String username, String password, String firstName, String lastName, char gender, String birthday) {
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.birthday = birthday;
+		this.gender = gender;
+	}
 
 	public String getUsername() {
 		return username;
@@ -41,11 +53,11 @@ public class User {
 		this.birthday = birthday;
 	}
 
-	public String getGender() {
+	public char getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(char gender) {
 		this.gender = gender;
 	}
 	

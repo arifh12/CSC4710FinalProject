@@ -11,9 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserDAO userDAO;
+	private InitializeDB db;
+	private final String USER_ROOT = "root";
+	private final String PASS_ROOT = "pass1234";
 	
 	public void init() {
 		userDAO = new UserDAO();
+		db = new InitializeDB();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,6 +33,10 @@ public class ControlServlet extends HttpServlet {
 			case "/login":
 				processLogin(request, response);
 				break;
+			case "/initialize":
+				db.initialize();
+				
+				break;
 			default:
 				System.out.println("error");
 			}
@@ -41,7 +49,12 @@ public class ControlServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		userDAO.login(username, password);
+		if(username.equalsIgnoreCase(USER_ROOT) && password.equalsIgnoreCase(PASS_ROOT)) {
+			response.sendRedirect("Initialization.jsp");
+		} else if (db.isInitialized()) 
+			userDAO.login(username, password);
+		else 
+			System.out.println("*****DATABASE NOT INITIALIZED*****");
 		
 		System.out.println(username + " , " + password);
 	}
