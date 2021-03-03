@@ -16,13 +16,15 @@
                 </tr>
                 <tr>
                     <td>Password</td>
-                    <td><input type="password" name="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"/></td>
+                    <td><input type="password" name="password" required 
+                    		placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;"/>
+                    </td>
                 </tr>
 
             </table>
             <br>
             <input type="submit" value="Login" />
-            <p>New User? Register for an account. <a href="registration.jsp">Register Here.</a>
+            <p>New User? Register for an account. <a href="RegistrationForm.jsp">Register Here.</a>
         </form>
 </body>
 </html>

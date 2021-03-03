@@ -17,13 +17,17 @@ public class InitializeDB {
 	private final String PASS = "pass1234";
 	
 	public InitializeDB() {
-		
+		connect();
 	}
 	
 	public void connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(URL, USER, PASS);
+			
+			String sql = "SHOW DATABASES LIKE 'sunsetdb'";
+			st = conn.createStatement();
+			initializeStatus = st.execute(sql);
 		} catch (SQLException | ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
@@ -90,7 +94,7 @@ public class InitializeDB {
 		User[] testUsers = {
 				new User("arif123", "hasan456", "Arif", "Hasan", 'M', "2000-06-12"),
 				new User("ahtesamul123", "haque456", "Ahtesamul", "Haque", 'M', "2000-01-01"),
-				new User("psherman", "42wallabyway", "P", "Sherman", 'M', "2003-05-30"),
+				new User("psherman", "42wallabyway", "P.", "Sherman", 'M', "2003-05-30"),
 		};
 		
 		UserDAO userDAO = new UserDAO();

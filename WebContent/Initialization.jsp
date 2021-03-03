@@ -4,12 +4,12 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Initialize Database</title>
+<title>Initialization</title>
 </head>
 <body>
-	<h1>Click the button below to initialize the database</h1>
+	<h3>Click the button below to initialize the database</h3>
 	<form action="initialize" method="get">
-		<input type="submit" value="Initialize"/>
+		<input type="submit" value="Initialize Databse"/>
 	</form>
 </body>
 </html>
