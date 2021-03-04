@@ -10,24 +10,17 @@ public class InitializeDB {
 	private Statement st = null;
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
-	private boolean initializeStatus = false;
 	
-	private final String URL = "jdbc:mysql://localhost/";
+	private String url = "jdbc:mysql://localhost/";
 	private final String USER = "john";
 	private final String PASS = "pass1234";
 	
-	public InitializeDB() {
-		connect();
-	}
+	public InitializeDB() {}
 	
-	public void connect() {
+	private void connect() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = DriverManager.getConnection(URL, USER, PASS);
-			
-			String sql = "SHOW DATABASES LIKE 'sunsetdb'";
-			st = conn.createStatement();
-			initializeStatus = st.execute(sql);
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			conn = DriverManager.getConnection(url, USER, PASS);
 		} catch (SQLException | ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
@@ -38,13 +31,11 @@ public class InitializeDB {
 			System.out.println("*****ESTABLISHED CONNECTION****");
 	}
 	
-	public void initialize() throws SQLException {
+	public void initialize() throws SQLException {	
 		connect();
-		
 		String[] sqlArr = {
 				"DROP DATABASE IF EXISTS sunsetdb;",
-				"CREATE DATABASE IF NOT EXISTS sunsetdb;",
-				"USE sunsetdb;"
+				"CREATE DATABASE IF NOT EXISTS sunsetdb;"
 				};
 		
 		for (String sql: sqlArr) {
@@ -52,15 +43,18 @@ public class InitializeDB {
 			st.execute(sql);
 		}
 		
+		url += "sunsetdb?useSSL=false";
+		connect();
+		
 		createTables();
 		populateTables();
 		
-		initializeStatus = true;
-		
 		System.out.println("*****sunsetdb HAS BEEN SUCCESSFULLY INITIALIZED****");
+		
+		disconnect();
 	}
 	
-	public void createTables() throws SQLException {
+	private void createTables() throws SQLException {
 		String[] sqlArr = {
 				"create table user ("
 				+ "	   username varchar(40),"
@@ -90,7 +84,7 @@ public class InitializeDB {
 		System.out.println("*****TABLES HAVE BEEN CREATED IN sunsetdb****");
 	}
 	
-	public void populateTables() throws SQLException {
+	private void populateTables() throws SQLException {
 		User[] testUsers = {
 				new User("arif123@hasan.com", "hasan456", "Arif", "Hasan", "Male", "2000-06-12"),
 				new User("ahtesamul123", "haque456", "Ahtesamul", "Haque", "Male", "2000-01-01"),
@@ -103,9 +97,16 @@ public class InitializeDB {
 		}
 		
 		System.out.println("*****"+ testUsers.length + " TUPLES HAVE BEEN INSERTED INTO sunsetdb****");
-	} 
-
-	public boolean isInitialized() {
-		return initializeStatus;
+	}
+	
+	private void disconnect() throws SQLException {
+		if (st != null && !st.isClosed())
+			st.close();
+		if (ps != null && !ps.isClosed())
+			ps.close();
+		if (rs != null && !rs.isClosed())
+			rs.close();
+		if (conn != null && !conn.isClosed())
+			conn.close();
 	}
 }

@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,7 +36,8 @@ public class ControlServlet extends HttpServlet {
 				break;
 			case "/initialize":
 				db.initialize();
-				response.sendRedirect("LoginForm.jsp");
+				RequestDispatcher rd = request.getRequestDispatcher("HomePage.jsp");
+				rd.forward(request, response);
 				break;
 			case "/register":
 				processRegister(request, response);
@@ -52,19 +54,22 @@ public class ControlServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		if(username.equalsIgnoreCase(USER_ROOT) && password.equalsIgnoreCase(PASS_ROOT)) {
+		if(username.equalsIgnoreCase(USER_ROOT) && password.equals(PASS_ROOT)) {
 			response.sendRedirect("Initialization.jsp");
-		} else if (db.isInitialized()) {
-			userDAO.login(username, password);
+		} 
+		else if (userDAO.login(username, password)) {
+			RequestDispatcher rd = request.getRequestDispatcher("HomePage.jsp");
+			rd.forward(request, response);
+		} else {
+			request.getSession().setAttribute("errorMessage", "Invalid user credentials!");
 			response.sendRedirect("LoginForm.jsp");
 		}
-		else 
-			System.out.println("*****DATABASE NOT INITIALIZED*****");
+			
 		
-		System.out.println(username + " , " + password);
+		System.out.println(username + ", " + password);
 	}
 	
-	private void processRegister(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+	private void processRegister(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String firstName = request.getParameter("fname");
 		String lastName = request.getParameter("lname");
 		String birthday = request.getParameter("birthday");
@@ -77,11 +82,12 @@ public class ControlServlet extends HttpServlet {
 		if(userDAO.insert(user)) {
 			System.out.println("***USER INSERTED SUCCESSFULLY***");
 			user.toString();
+			RequestDispatcher rd = request.getRequestDispatcher("HomePage.jsp");
+			rd.forward(request, response);
 		} else {
-			System.out.println("***USERNAME ALREADY EXISTS!***");
+			System.out.println("***FAILED REGISTRATION***");
+			response.sendRedirect("RegistrationForm.jsp");
 		}
-		
-		response.sendRedirect("LoginForm.jsp");
 	}
 
 }

@@ -4,12 +4,12 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Initialization</title>
+<title>Home</title>
 </head>
 <body>
-	<h3>Click the button below to initialize the database</h3>
-	<form action="initialize" method="post">
-		<input type="submit" value="Initialize Databse"/>
+	<h3>Successfully signed in!</h3>
+	<form action="LoginForm.jsp" method="post">
+		<input type="submit" value="Log out"/>
 	</form>
 </body>
 </html>

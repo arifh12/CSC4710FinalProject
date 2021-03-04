@@ -11,9 +11,11 @@ public class UserDAO {
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
 	
-	public UserDAO() {
+	public UserDAO() {}
+	
+	private void connect() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = (Connection)DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/sunsetdb?"
 					+ "useSSL=false&user=john&password=pass1234");
 		} catch (SQLException | ClassNotFoundException e) {
@@ -24,7 +26,9 @@ public class UserDAO {
 	}
 	
 	public boolean insert(User user) throws SQLException {
-		String sql = "INSERT into user VALUES(?, ?, ?, ?, ?, ?)";
+		connect();
+		
+		String sql = "INSERT into user(username, password, first_name, last_name, gender, birthday) VALUES(?, ?, ?, ?, ?, ?)";
 		
 		ps = conn.prepareStatement(sql);
 		ps.setString(1, user.getUsername());
@@ -35,13 +39,17 @@ public class UserDAO {
 		ps.setString(6, user.getBirthday());
 		
 		boolean tupleInserted = ps.executeUpdate() > 0;
-		ps.close();
+		System.out.println(tupleInserted);
+		
+		disconnect();
 		
 		return tupleInserted;
 	}
 	
 	//TODO: make this class return a User object!!!!!
 	public boolean login(String username, String password) throws SQLException {
+		connect();
+		
 		String sql = "SELECT * FROM user WHERE username=? AND password=?";
 		
 		ps = conn.prepareStatement(sql);
@@ -54,14 +62,26 @@ public class UserDAO {
 		
 		//TODO: still need to do something with this part later in the project!!!
 		if (rs.next()) {
-			System.out.println("login successful from UserDAO");
+			System.out.println("*****LOGIN SUCCESFUL FOR USER " + username + "*****");
 			loginSuccess = true; 
 		} else {
-			System.out.println("NOT FOUND from UserDAO!!!!!!!");
+			System.out.println("*****NOT FOUND USER " + username + "*****");
 			loginSuccess = false;
 		}
 		
-		return loginSuccess;
+		disconnect();
 		
+		return loginSuccess;
+	}
+	
+	private void disconnect() throws SQLException {
+		if (st != null && !st.isClosed())
+			st.close();
+		if (ps != null && !ps.isClosed())
+			ps.close();
+		if (rs != null && !rs.isClosed())
+			rs.close();
+		if (conn != null && !conn.isClosed())
+			conn.close();
 	}
 }
