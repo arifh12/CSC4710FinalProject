@@ -28,29 +28,30 @@ public class UserDAO {
 	public boolean insert(User user) throws SQLException {
 		connect();
 		
-		String sql = "INSERT into user(username, password, first_name, last_name, gender, birthday) VALUES(?, ?, ?, ?, ?, ?)";
+		if (!isDuplicate(user.getUsername())) {
+			String sql = "INSERT into user(username, password, first_name, last_name, gender, birthday) VALUES(?, ?, ?, ?, ?, ?);";
 		
-		ps = conn.prepareStatement(sql);
-		ps.setString(1, user.getUsername());
-		ps.setString(2, user.getPassword());
-		ps.setString(3, user.getFirstName());
-		ps.setString(4, user.getLastName());
-		ps.setString(5, user.getGender());
-		ps.setString(6, user.getBirthday());
-		
-		boolean tupleInserted = ps.executeUpdate() > 0;
-		System.out.println(tupleInserted);
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, user.getUsername());
+			ps.setString(2, user.getPassword());
+			ps.setString(3, user.getFirstName());
+			ps.setString(4, user.getLastName());
+			ps.setString(5, user.getGender());
+			ps.setString(6, user.getBirthday());
+					
+			return ps.executeUpdate() > 0;
+		}
 		
 		disconnect();
 		
-		return tupleInserted;
+		return false;
 	}
 	
 	//TODO: make this class return a User object!!!!!
 	public boolean login(String username, String password) throws SQLException {
 		connect();
 		
-		String sql = "SELECT * FROM user WHERE username=? AND password=?";
+		String sql = "SELECT * FROM user WHERE username=? AND password=?;";
 		
 		ps = conn.prepareStatement(sql);
 		ps.setString(1, username);
@@ -72,6 +73,16 @@ public class UserDAO {
 		disconnect();
 		
 		return loginSuccess;
+	}
+	
+	public boolean isDuplicate(String username) throws SQLException {
+		String sql = "SELECT * FROM user WHERE username=?;";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, username);
+		rs = ps.executeQuery();
+		
+		return rs.next();
 	}
 	
 	private void disconnect() throws SQLException {

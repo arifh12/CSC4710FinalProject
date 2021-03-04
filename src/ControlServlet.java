@@ -76,18 +76,30 @@ public class ControlServlet extends HttpServlet {
 		String gender = request.getParameter("gender");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		String confirmPassword = request.getParameter("confirm_password");
 		
 		User user = new User(username, password, firstName, lastName, gender, birthday);
+		RequestDispatcher rd;
 		
-		if(userDAO.insert(user)) {
-			System.out.println("***USER INSERTED SUCCESSFULLY***");
-			user.toString();
-			RequestDispatcher rd = request.getRequestDispatcher("HomePage.jsp");
-			rd.forward(request, response);
+		if (password.equals(confirmPassword)) {
+			if(userDAO.insert(user)) {
+				System.out.println("***USER INSERTED SUCCESSFULLY***");
+				user.toString();
+				rd = request.getRequestDispatcher("HomePage.jsp");
+			} else {
+				System.out.println("***DUPLICATE USERNAME***");
+				request.setAttribute("user", user);
+				request.setAttribute("errorMessage", "Email already exists!");
+				rd = request.getRequestDispatcher("RegistrationForm.jsp");
+			}
 		} else {
-			System.out.println("***FAILED REGISTRATION***");
-			response.sendRedirect("RegistrationForm.jsp");
+			request.setAttribute("user", user);
+			System.out.println("***UNMATCHING PASSWORDS***");
+			request.setAttribute("errorMessage", "Passwords do not match!");
+			rd = request.getRequestDispatcher("RegistrationForm.jsp");
 		}
+		
+		rd.forward(request, response);
 	}
 
 }

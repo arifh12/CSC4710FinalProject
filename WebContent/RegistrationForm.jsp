@@ -24,29 +24,28 @@ var check = function() {
             <table style="with: 100%">
 				<tr>
                     <td>First Name</td>
-                    <td><input type="text" name="fname" placeholder="John"/></td>
+                    <td><input type="text" name="fname" placeholder="John" value="${user.getFirstName()}"/></td>
                 </tr>
 				<tr>
                     <td>Last Name</td>
-                    <td><input type="text" name="lname" placeholder="Doe"/></td>
+                    <td><input type="text" name="lname" placeholder="Doe" value="${user.getLastName()}"/></td>
                 </tr>
 				<tr>
                     <td>Birthday</td>
-                    <td><input type="date" name="birthday" maxlength="10" placeholder="YYYY-MM-DD"/></td>
+                    <td><input type="date" name="birthday" maxlength="10" placeholder="YYYY-MM-DD" value="${user.getBirthday()}"/></td>
                 </tr>
 				<tr>
                     <td>Gender</td>
-                    <td><input type="radio" id="male" name="gender" value="male">
-						<label for="male">Male</label><br>
-						<input type="radio" id="female" name="gender" value="female">
-						<label for="female">Female</label><br>
-						<input type="radio" id="other" name="gender" value="other">
-						<label for="other">Other</label>
+                    <td><select id="cars">
+  						<option value="Male">Male</option>
+  						<option value="Female">Female</option>
+ 						<option value="Other">Other</option>
+						</select>
 					</td>
                 </tr>
                 <tr>
                     <td>Email Address</td>
-                    <td><input type="email" name="username" required placeholder="example@mail.com" /></td>
+                    <td><input type="email" name="username" required placeholder="example@mail.com" value="${user.getUsername()}"/></td>
                 </tr>
                 <tr>
                     <td>Password</td>
@@ -61,7 +60,7 @@ var check = function() {
                     <span id='message'></span></td>
                 </tr>
             </table>
-            <input type="submit" value="Register" />
+            <input type="submit" value="Register" /> <span style ="color:red">${errorMessage} </span>
         </form>
         <p>Already have an account? <a href="LoginForm.jsp">Login Here.</a>
 </body>

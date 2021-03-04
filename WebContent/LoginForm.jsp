@@ -23,7 +23,7 @@
 
             </table>
             <br>
-            <input type="submit" value="Login" /> ${errorMessage}
+            <input type="submit" value="Login" /> <span style ="color:red">${errorMessage} </span>
             <p>New User? Register for an account. <a href="RegistrationForm.jsp">Register Here.</a>
         </form>
 </body>
