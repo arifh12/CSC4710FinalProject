@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+////testing
 public class InitializeDB {
 	private Connection conn = null;
 	private Statement st = null;
