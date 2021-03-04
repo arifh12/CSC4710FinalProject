@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-////testing
 public class InitializeDB {
 	private Connection conn = null;
 	private Statement st = null;
@@ -88,8 +87,17 @@ public class InitializeDB {
 	private void populateTables() throws SQLException {
 		User[] testUsers = {
 				new User("arif123@hasan.com", "hasan456", "Arif", "Hasan", "Male", "2000-06-12"),
-				new User("ahtesamul123", "haque456", "Ahtesamul", "Haque", "Male", "2000-01-01"),
-				new User("psherman", "42wallabyway", "P.", "Sherman", "Male", "2003-05-30"),
+				new User("ahtesamul123@haque.com", "haque456", "Ahtesamul", "Haque", "Male", "2000-01-01"),
+				new User("psherman@gmail.com", "42wallabyway", "P.", "Sherman", "Other", "2003-05-30"),
+				
+				new User("bruce@batman.com", "bruce", "Arif", "Hasan", "Male", "2000-06-12"),
+				new User("robin@batman.com", "robin", "Ahtesamul", "Haque", "Male", "2000-01-01"),
+				new User("joker@batman.com", "joker", "Joker", "Clown", "Other", "1998-09-09"),
+				
+				new User("familyguy@fox.com", "peterg", "Peter", "Griffin", "Male", "2002-03-15"),
+				new User("brian@fox.com", "briang", "Brian", "Griffin", "Male", "2000-07-27"),
+				new User("meg@fox.com", "megg", "Meg", "Griffin", "Female", "2004-05-30"),
+				new User("taylor@fox.com", "taylor", "Taylor", "Swift", "Female", "2006-02-15"),
 		};
 		
 		UserDAO userDAO = new UserDAO();
