@@ -200,6 +200,15 @@ public class InitializeDB {
 				{"ahtesamul123@haque.com", "arif123@hasan.com"},
 				{"ahtesamul123@haque.com", "bruce@batman.com"},
 				
+				{"robin@batman.com", "bruce@batman.com"},
+				{"taylor@fox.com", "bruce@fox.com"},
+				{"joker@batman.com", "robin@batman.com"},
+				
+				{"familyguy@fox.com", "ahtesamul123@haque.com"},
+				{"ahtesamul123@haque.com", "apsherman@gmail.com"},
+				{"arif123@hasan.com", "robin@batman.com"},
+				{"taylor@fox.com", "apsherman@gmail.com"},
+				
 				//TODO add more rows. 
 			};
 		
