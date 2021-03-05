@@ -32,11 +32,14 @@ var check = function() {
                 </tr>
 				<tr>
                     <td>Birthday</td>
-                    <td><input type="date" name="birthday" maxlength="10" placeholder="YYYY-MM-DD" value="${user.getBirthday()}"/></td>
+                    <td><input type="date" name="birthday" maxlength="10" placeholder="YYYY-MM-DD" min="1899-01-01" max="2020-12-31"
+                    		value="${user.getBirthday()}"/>
+                    </td>
                 </tr>
 				<tr>
                     <td>Gender</td>
-                    <td><select id="cars">
+                    <td><select id="gender">
+                    	<option value=""></option>
   						<option value="Male">Male</option>
   						<option value="Female">Female</option>
  						<option value="Other">Other</option>

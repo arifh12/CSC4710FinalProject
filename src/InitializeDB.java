@@ -43,7 +43,9 @@ public class InitializeDB {
 			st.execute(sql);
 		}
 		
-		url += "sunsetdb?useSSL=false";
+		String s = "sunsetdb?useSSL=false";
+		if (!url.contains(s))
+			url += s;
 		connect();
 		
 		createTables();
@@ -90,22 +92,47 @@ public class InitializeDB {
 				new User("ahtesamul123@haque.com", "haque456", "Ahtesamul", "Haque", "Male", "2000-01-01"),
 				new User("psherman@gmail.com", "42wallabyway", "P.", "Sherman", "Other", "2003-05-30"),
 				
-				new User("bruce@batman.com", "bruce", "Arif", "Hasan", "Male", "2000-06-12"),
-				new User("robin@batman.com", "robin", "Ahtesamul", "Haque", "Male", "2000-01-01"),
-				new User("joker@batman.com", "joker", "Joker", "Clown", "Other", "1998-09-09"),
-				
+				new User("bruce@batman.com", "brucew", "Buce", "Wayne", "Male", "2000-06-12"),
+				new User("robin@batman.com", "robinh", "Ronin", "Hood", "Male", "2000-01-01"),
+				new User("joker@batman.com", "jokerc", "Joker", "Clown", "Other", "1998-09-09"),
+			
 				new User("familyguy@fox.com", "peterg", "Peter", "Griffin", "Male", "2002-03-15"),
 				new User("brian@fox.com", "briang", "Brian", "Griffin", "Male", "2000-07-27"),
 				new User("meg@fox.com", "megg", "Meg", "Griffin", "Female", "2004-05-30"),
-				new User("taylor@fox.com", "taylor", "Taylor", "Swift", "Female", "2006-02-15"),
-		};
+				new User("taylor@fox.com", "taylors", "Taylor", "Swift", "Female", "2006-02-15"),
+			};
+		
+		String[][] testImages = {
+				{"coolimage.png", "This is a cool image.", "arif123@hasan.com"},
+				{"sunny_picture.jpg", "Picture of a sunny view.", "arif123@hasan.com"},
+				{"evening-sun.svg", "A view of the sun this evening", "ahtesamul123@haque.com"},
+				
+				//TODO: add more using the above format.
+				
+			};
+		
 		
 		UserDAO userDAO = new UserDAO();
 		for (User user : testUsers) {
 			userDAO.insert(user);
 		}
 		
+		for (String[] image : testImages) {
+			insertImage(image[0], image[1], image[2]);
+		}
+		
 		System.out.println("*****"+ testUsers.length + " TUPLES HAVE BEEN INSERTED INTO sunsetdb****");
+	}
+	
+	private boolean insertImage(String url, String description, String postUser) throws SQLException {
+		String sql = "INSERT INTO image(url, description, post_user) VALUES(?,?,?)";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, url);
+		ps.setString(2, description);
+		ps.setString(3, postUser);
+		
+		return ps.executeUpdate() > 0;
 	}
 	
 	private void disconnect() throws SQLException {
