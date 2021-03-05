@@ -53,19 +53,19 @@ public class ControlServlet extends HttpServlet {
 	private void processLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		RequestDispatcher rd;
 		
 		if(username.equalsIgnoreCase(USER_ROOT) && password.equals(PASS_ROOT)) {
-			response.sendRedirect("Initialization.jsp");
+			rd = request.getRequestDispatcher("Initialization.jsp");
 		} 
 		else if (userDAO.login(username, password)) {
-			RequestDispatcher rd = request.getRequestDispatcher("HomePage.jsp");
-			rd.forward(request, response);
+			rd = request.getRequestDispatcher("HomePage.jsp");
 		} else {
-			request.getSession().setAttribute("errorMessage", "Invalid user credentials!");
-			response.sendRedirect("LoginForm.jsp");
+			request.setAttribute("errorLogin", "Invalid user credentials!");
+			rd = request.getRequestDispatcher("LoginForm.jsp");
 		}
 			
-		
+		rd.forward(request, response);
 		System.out.println(username + ", " + password);
 	}
 	
@@ -89,13 +89,13 @@ public class ControlServlet extends HttpServlet {
 			} else {
 				System.out.println("***DUPLICATE USERNAME***");
 				request.setAttribute("user", user);
-				request.setAttribute("errorMessage", "Email already exists!");
+				request.setAttribute("errorRegistration", "Email already exists!");
 				rd = request.getRequestDispatcher("RegistrationForm.jsp");
 			}
 		} else {
 			request.setAttribute("user", user);
 			System.out.println("***UNMATCHING PASSWORDS***");
-			request.setAttribute("errorMessage", "Passwords do not match!");
+			request.setAttribute("errorRegistration", "Passwords do not match!");
 			rd = request.getRequestDispatcher("RegistrationForm.jsp");
 		}
 		

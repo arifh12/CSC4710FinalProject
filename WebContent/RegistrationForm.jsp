@@ -63,7 +63,7 @@ var check = function() {
                     <span id='message'></span></td>
                 </tr>
             </table>
-            <input type="submit" value="Register" /> <span style ="color:red">${errorMessage} </span>
+            <input type="submit" value="Register" /> <span style ="color:red">${errorRegistration} </span>
         </form>
         <p>Already have an account? <a href="LoginForm.jsp">Login Here.</a>
 </body>

@@ -75,8 +75,14 @@ public class InitializeDB {
 				+ "     post_user varchar(40) not null,"
 				+ "     foreign key(post_user) references user(username),"
 				+ "     primary key(image_id)"
+				+ ");",
+				"create table image_tag ("
+				+ "		image_id int,"
+				+ "    	tag varchar(20),"
+				+ "   	primary key(image_id, tag),"
+				+ "   	foreign key(image_id) references image(image_id)"
 				+ ");"
-				};
+			};
 		
 		for (String sql: sqlArr) {
 			st = conn.createStatement();
@@ -92,7 +98,7 @@ public class InitializeDB {
 				new User("ahtesamul123@haque.com", "haque456", "Ahtesamul", "Haque", "Male", "2000-01-01"),
 				new User("psherman@gmail.com", "42wallabyway", "P.", "Sherman", "Other", "2003-05-30"),
 				
-				new User("bruce@batman.com", "brucew", "Buce", "Wayne", "Male", "2000-06-12"),
+				new User("bruce@batman.com", "brucew", "Bruce", "Wayne", "Male", "2000-06-12"),
 				new User("robin@batman.com", "robinh", "Ronin", "Hood", "Male", "2000-01-01"),
 				new User("joker@batman.com", "jokerc", "Joker", "Clown", "Other", "1998-09-09"),
 			
@@ -111,12 +117,23 @@ public class InitializeDB {
 				
 			};
 		
+		String[][] testImageTags = {
+				{"1", "cool"},
+				{"1", "morning"},
+				{"2", "sunny"},
+				{"3", "evening"},
+				{"3", "dawn"}, 
+				{"3", "relaxing"},
+				
+			};
 		
+		// Inserting 10 realistic tuples into user table
 		UserDAO userDAO = new UserDAO();
 		for (User user : testUsers) {
 			userDAO.insert(user);
 		}
 		
+		// Inserting 10 realistic tuples into image table
 		for (String[] image : testImages) {
 			insertImage(image[0], image[1], image[2]);
 		}
@@ -124,7 +141,7 @@ public class InitializeDB {
 		System.out.println("*****"+ testUsers.length + " TUPLES HAVE BEEN INSERTED INTO sunsetdb****");
 	}
 	
-	private boolean insertImage(String url, String description, String postUser) throws SQLException {
+	private void insertImage(String url, String description, String postUser) throws SQLException {
 		String sql = "INSERT INTO image(url, description, post_user) VALUES(?,?,?)";
 		
 		ps = conn.prepareStatement(sql);
@@ -132,7 +149,17 @@ public class InitializeDB {
 		ps.setString(2, description);
 		ps.setString(3, postUser);
 		
-		return ps.executeUpdate() > 0;
+		ps.executeUpdate();
+	}
+	
+	private void insertImageTag(int imageId, String tag) throws SQLException  {
+		String sql = "INSERT INTO image_tag(image_id, tag) VALUES(?,?)";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setInt(1, imageId);
+		ps.setString(2, tag);
+		
+		ps.executeUpdate();
 	}
 	
 	private void disconnect() throws SQLException {
