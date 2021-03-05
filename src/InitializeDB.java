@@ -89,6 +89,14 @@ public class InitializeDB {
 				+ "     primary key(username, image_id),"
 				+ "     foreign key(username) references user(username),"
 				+ "     foreign key(image_id) references image(image_id)"
+				+ ");",
+				"create table comments("
+				+ "		username varchar(40),"
+				+ "   	image_id int,"
+				+ " 	message varchar(140),"
+				+ "     primary key(username, image_id),"
+				+ "     foreign key(username) references user(username),"
+				+ "     foreign key(image_id) references image(image_id)"
 				+ ");"
 			};
 		
@@ -154,6 +162,14 @@ public class InitializeDB {
 				//TODO: add more rows. second column must be between 1 and 10.
 			};
 		
+		String[][] testComments = {
+				{"ahtesamul123@haque.com", "1", "This image is very cool."},
+				{"arif123@hasan.com", "2", "The sunset looks nice."},
+				{"ahtesamul123@haque.com", "2", "Good picture. I like it very much."},
+				
+				//TODO: add more rows. second column must be between 1 and 10.
+			};
+		
 		// Inserting 10 realistic tuples into user table
 		UserDAO userDAO = new UserDAO();
 		for (User user : testUsers) {
@@ -170,12 +186,17 @@ public class InitializeDB {
 			insertImageTag(Integer.parseInt(imageTag[0]), imageTag[1]);
 		}
 		
-		// Inserting 10 realistic tuples into image_tag table
+		// Inserting 10 realistic tuples into likes table
 		for (String[] like : testLikes) {
 			insertLikes(like[0], Integer.parseInt(like[1]), like[2]);
 		}
 		
-		System.out.println("*****"+ testUsers.length + " TUPLES HAVE BEEN INSERTED INTO sunsetdb****");
+		// Inserting 10 realistic tuples into comments table
+		for (String[] comment : testComments) {
+			insertComments(comment[0], Integer.parseInt(comment[1]), comment[2]);
+		}
+		
+		System.out.println("*****TUPLES HAVE BEEN INSERTED INTO sunsetdb****");
 	}
 	
 	private void insertImage(String url, String description, String postUser) throws SQLException {
@@ -200,12 +221,23 @@ public class InitializeDB {
 	}
 	
 	private void insertLikes(String username, int imageId, String likeDate) throws SQLException {
-		String sql = "INSERT INTO likes(username, image_id, like_date) VALUES(?,?, ?)";
+		String sql = "INSERT INTO likes(username, image_id, like_date) VALUES(?,?,?)";
 		
 		ps = conn.prepareStatement(sql);
 		ps.setString(1, username);
 		ps.setInt(2, imageId);
 		ps.setString(3, likeDate);
+		
+		ps.executeUpdate();
+	}
+	
+	private void insertComments(String username, int imageId, String message) throws SQLException {
+		String sql = "INSERT INTO comments(username, image_id, message) VALUES(?,?,?)";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, username);
+		ps.setInt(2, imageId);
+		ps.setString(3, message);
 		
 		ps.executeUpdate();
 	}
