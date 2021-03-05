@@ -134,7 +134,7 @@ public class InitializeDB {
 				{"dog.svg", "Brian walking in the park.", "brian@fox.com"},
 				
 				{"prom.png", "Meg on prom day.", "meg@fox.com"},
-				{"first_concert.jpg", "Taylor's first concert performing.", "taylor@fox.com"},
+				{"first_concert.jpg", "Taylor's first outdoor concert.", "taylor@fox.com"},
 				{"lake.svg", "A view of the lake.", "psherman@gmail.com"},
 				{"hiking-sunset.svg", "Hiking in a while the sun sets.", "familyguy@fox.com"}		
 			};
@@ -159,13 +159,31 @@ public class InitializeDB {
 				{"arif123@hasan.com", "3", "2018-04-17"},
 				{"ahtesamul123@haque.com", "1", "2009-11-05"},
 				
+				{"bruce@batman.com", "5", "2012-05-03"},
+				{"robin@batman.com", "9", "2019-03-15"},
+				{"brian@fox.com", "2", "2003-10-10"},
+				
+				{"meg@fox.com", "6", "2017-06-29"},
+				{"taylor@fox.com", "10", "2011-01-30"},
+				{"psherman@gmail.com", "4", "2005-12-25"},
+				{"familyguy@fox.com", "7", "2008-09-08"},
+				
 				//TODO: add more rows. second column must be between 1 and 10.
 			};
 		
 		String[][] testComments = {
 				{"ahtesamul123@haque.com", "1", "This image is very cool."},
 				{"arif123@hasan.com", "2", "The sunset looks nice."},
-				{"ahtesamul123@haque.com", "2", "Good picture. I like it very much."},
+				{"ahtesamul123@haque.com", "3", "Good picture. I like it very much."},
+				
+				{"meg@fox.com", "7", "I'll make this my wallpaper!"},
+				{"bruce@batman.com", "3", "I wish I could be there."},
+				{"apsherman@gmail.com", "5", "Wow, looks like you're having fun!"},
+				
+				{"robin@batman.com", "2", "That camera takes amazing pictures"},
+				{"taylor@fox.com", "6", "Wow, where'd you take this sunset picture?"},
+				{"joker@batman.com", "4", "The sun looks beautiful."},
+				{"familyguy@fox.com", "10", "I wish we could get more sunlight here in Alaska, LOL."},
 				
 				//TODO: add more rows. second column must be between 1 and 10.
 			};
