@@ -107,6 +107,15 @@ public class InitializeDB {
 				{"sunny_picture.jpg", "Picture of a sunny view.", "arif123@hasan.com"},
 				{"evening-sun.svg", "A view of the sun this evening", "ahtesamul123@haque.com"},
 				
+				{"stopping_crime.jpg", "Batman saves the day!", "bruce@batman.com"},
+				{"robin-pic.png", "The very first robin sidekick.", "robin@batman.com"},
+				{"dog.svg", "Brian the dog as a puppy.", "brian@fox.com"},
+				
+				{"prom.png", "Meg on prom day.", "meg@fox.com"},
+				{"first_concert.jpg", "Taylor's first concert performing.", "taylor@fox.com"},
+				{"lake.svg", "A view of the lake.", "psherman@gmail.com"},
+				{"new-character.svg", "A picture of the newest characters.", "familyguy@fox.com"},
+				
 				//TODO: add more using the above format.
 				
 			};
