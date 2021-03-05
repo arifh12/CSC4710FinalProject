@@ -81,6 +81,14 @@ public class InitializeDB {
 				+ "    	tag varchar(20),"
 				+ "   	primary key(image_id, tag),"
 				+ "   	foreign key(image_id) references image(image_id)"
+				+ ");",
+				"create table likes("
+				+ "		username varchar(40),"
+				+ "   	image_id int,"
+				+ " 	like_date date default (curdate()),"
+				+ "     primary key(username, image_id),"
+				+ "     foreign key(username) references user(username),"
+				+ "     foreign key(image_id) references image(image_id)"
 				+ ");"
 			};
 		
@@ -111,29 +119,39 @@ public class InitializeDB {
 		String[][] testImages = {
 				{"coolimage.png", "This is a cool image.", "arif123@hasan.com"},
 				{"sunny_picture.jpg", "Picture of a sunny view.", "arif123@hasan.com"},
-				{"evening-sun.svg", "A view of the sun this evening", "ahtesamul123@haque.com"},
+				{"evening-sun.svg", "A view of the sun this evening.", "ahtesamul123@haque.com"},
 				
-				{"stopping_crime.jpg", "Batman saves the day!", "bruce@batman.com"},
-				{"robin-pic.png", "The very first robin sidekick.", "robin@batman.com"},
-				{"dog.svg", "Brian the dog as a puppy.", "brian@fox.com"},
+				{"sunset_batman.jpg", "Batman watching the sunset!", "bruce@batman.com"},
+				{"robin-pic.png", "Robin admiring the sunny day.", "robin@batman.com"},
+				{"dog.svg", "Brian walking in the park.", "brian@fox.com"},
 				
 				{"prom.png", "Meg on prom day.", "meg@fox.com"},
 				{"first_concert.jpg", "Taylor's first concert performing.", "taylor@fox.com"},
 				{"lake.svg", "A view of the lake.", "psherman@gmail.com"},
-				{"new-character.svg", "A picture of the newest characters.", "familyguy@fox.com"},
-				
-				//TODO: add more using the above format.
-				
+				{"hiking-sunset.svg", "Hiking in a while the sun sets.", "familyguy@fox.com"}		
 			};
 		
 		String[][] testImageTags = {
 				{"1", "cool"},
 				{"1", "morning"},
 				{"2", "sunny"},
+				
 				{"3", "evening"},
 				{"3", "dawn"}, 
 				{"3", "relaxing"},
 				
+				{"6", "dog"},
+				{"7", "prom"}, 
+				{"9", "lake"},
+				{"10", "hiking"}
+			};
+		
+		String[][] testLikes = {
+				{"arif123@hasan.com", "1", "2015-08-22"},
+				{"arif123@hasan.com", "3", "2018-04-17"},
+				{"ahtesamul123@haque.com", "1", "2009-11-05"},
+				
+				//TODO: add more rows. second column must be between 1 and 10.
 			};
 		
 		// Inserting 10 realistic tuples into user table
@@ -145,6 +163,16 @@ public class InitializeDB {
 		// Inserting 10 realistic tuples into image table
 		for (String[] image : testImages) {
 			insertImage(image[0], image[1], image[2]);
+		}
+		
+		// Inserting 10 realistic tuples into image_tag table
+		for (String[] imageTag : testImageTags) {
+			insertImageTag(Integer.parseInt(imageTag[0]), imageTag[1]);
+		}
+		
+		// Inserting 10 realistic tuples into image_tag table
+		for (String[] like : testLikes) {
+			insertLikes(like[0], Integer.parseInt(like[1]), like[2]);
 		}
 		
 		System.out.println("*****"+ testUsers.length + " TUPLES HAVE BEEN INSERTED INTO sunsetdb****");
@@ -167,6 +195,17 @@ public class InitializeDB {
 		ps = conn.prepareStatement(sql);
 		ps.setInt(1, imageId);
 		ps.setString(2, tag);
+		
+		ps.executeUpdate();
+	}
+	
+	private void insertLikes(String username, int imageId, String likeDate) throws SQLException {
+		String sql = "INSERT INTO likes(username, image_id, like_date) VALUES(?,?, ?)";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, username);
+		ps.setInt(2, imageId);
+		ps.setString(3, likeDate);
 		
 		ps.executeUpdate();
 	}
