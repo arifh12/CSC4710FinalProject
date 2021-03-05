@@ -97,6 +97,13 @@ public class InitializeDB {
 				+ "     primary key(username, image_id),"
 				+ "     foreign key(username) references user(username),"
 				+ "     foreign key(image_id) references image(image_id)"
+				+ ");",
+				"create table follows ("
+				+ "	following_username varchar(40),"
+				+ "    follower_username varchar(40),"
+				+ "    primary key(following_username, follower_username),"
+				+ "    foreign key(following_username) references user(username),"
+				+ "    foreign key(follower_username) references user(username)"
 				+ ");"
 			};
 		
@@ -170,6 +177,14 @@ public class InitializeDB {
 				//TODO: add more rows. second column must be between 1 and 10.
 			};
 		
+		String[][] testFollows = {
+				{"arif123@hasan.com", "ahtesamul123@haque.com"},
+				{"ahtesamul123@haque.com", "arif123@hasan.com"},
+				{"ahtesamul123@haque.com", "bruce@batman.com"},
+				
+				//TODO add more rows. 
+			};
+		
 		// Inserting 10 realistic tuples into user table
 		UserDAO userDAO = new UserDAO();
 		for (User user : testUsers) {
@@ -194,6 +209,11 @@ public class InitializeDB {
 		// Inserting 10 realistic tuples into comments table
 		for (String[] comment : testComments) {
 			insertComments(comment[0], Integer.parseInt(comment[1]), comment[2]);
+		}
+		
+		// Inserting 10 realistic tuples into comments table
+		for (String[] follow : testFollows) {
+			insertFollows(follow[0], follow[1]);
 		}
 		
 		System.out.println("*****TUPLES HAVE BEEN INSERTED INTO sunsetdb****");
@@ -238,6 +258,16 @@ public class InitializeDB {
 		ps.setString(1, username);
 		ps.setInt(2, imageId);
 		ps.setString(3, message);
+		
+		ps.executeUpdate();
+	}
+	
+	private void insertFollows(String follower, String following) throws SQLException {
+		String sql = "INSERT INTO follows(follower_username, following_username) VALUES(?,?)";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, follower);
+		ps.setString(2, following);
 		
 		ps.executeUpdate();
 	}
