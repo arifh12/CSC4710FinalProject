@@ -99,7 +99,7 @@ public class InitializeDB {
 				+ "     foreign key(image_id) references image(image_id)"
 				+ ");",
 				"create table follows ("
-				+ "	following_username varchar(40),"
+				+ "		following_username varchar(40),"
 				+ "    follower_username varchar(40),"
 				+ "    primary key(following_username, follower_username),"
 				+ "    foreign key(following_username) references user(username),"
@@ -185,12 +185,12 @@ public class InitializeDB {
 				
 				{"meg@fox.com", "7", "I'll make this my wallpaper!"},
 				{"bruce@batman.com", "3", "I wish I could be there."},
-				{"apsherman@gmail.com", "5", "Wow, looks like you're having fun!"},
+				{"psherman@gmail.com", "5", "Wow, looks like you're having fun!"},
 				
 				{"robin@batman.com", "2", "That camera takes amazing pictures"},
 				{"taylor@fox.com", "6", "Wow, where'd you take this sunset picture?"},
 				{"joker@batman.com", "4", "The sun looks beautiful."},
-				{"familyguy@fox.com", "10", "I wish we could get more sunlight here in Alaska, LOL."},
+				{"familyguy@fox.com", "8", "I wish we could get more sunlight here in Alaska, LOL."},
 				
 				//TODO: add more rows. second column must be between 1 and 10.
 			};
@@ -201,13 +201,13 @@ public class InitializeDB {
 				{"ahtesamul123@haque.com", "bruce@batman.com"},
 				
 				{"robin@batman.com", "bruce@batman.com"},
-				{"taylor@fox.com", "bruce@fox.com"},
+				{"taylor@fox.com", "bruce@batman.com"},
 				{"joker@batman.com", "robin@batman.com"},
 				
 				{"familyguy@fox.com", "ahtesamul123@haque.com"},
-				{"ahtesamul123@haque.com", "apsherman@gmail.com"},
+				{"ahtesamul123@haque.com", "psherman@gmail.com"},
 				{"arif123@hasan.com", "robin@batman.com"},
-				{"taylor@fox.com", "apsherman@gmail.com"},
+				{"taylor@fox.com", "psherman@gmail.com"},
 				
 				//TODO add more rows. 
 			};
@@ -289,12 +289,12 @@ public class InitializeDB {
 		ps.executeUpdate();
 	}
 	
-	private void insertFollows(String follower, String following) throws SQLException {
-		String sql = "INSERT INTO follows(follower_username, following_username) VALUES(?,?)";
+	private void insertFollows(String following, String follower) throws SQLException {
+		String sql = "INSERT INTO follows(following_username, follower_username) VALUES(?,?)";
 		
 		ps = conn.prepareStatement(sql);
-		ps.setString(1, follower);
-		ps.setString(2, following);
+		ps.setString(1, following);
+		ps.setString(2, follower);
 		
 		ps.executeUpdate();
 	}
