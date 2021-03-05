@@ -1,5 +1,5 @@
 # CSC4710FinalProject
-Final project for CSC4710 by Arif Hasan and Ahtesamul Haque.
+Final project for CSC4710 by Arif Hasan(go3480) and Ahtesamul Haque(go1527).
 
 Web application created using Java, MySQL, Tomcat, and JSP.
 This application allows users to share sunset images, which are stored in a database along with other relevant information.
