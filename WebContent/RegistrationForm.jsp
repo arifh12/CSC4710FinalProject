@@ -3,23 +3,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script>
-var check = function() {
-  if (document.getElementById('password').value ==
-    document.getElementById('confirm_password').value) {
-    document.getElementById('message').style.color = 'green';
-    document.getElementById('message').innerHTML = 'matching';
-  } else {
-    document.getElementById('message').style.color = 'red';
-    document.getElementById('message').innerHTML = 'not matching';
-  }
-}
-</script>
+	<style><%@include file="MainStyle.css"%></style>
+	<script>
+		/* var check = function() {
+  			if (document.getElementById('password').value ==
+    			document.getElementById('confirm_password').value) {
+    			document.getElementById('message').style.color = 'green';
+    			document.getElementById('message').innerHTML = 'matching';
+  			} else {
+    			document.getElementById('message').style.color = 'red';
+    			document.getElementById('message').innerHTML = 'not matching';
+ 			}
+		} */
+	</script>
 <meta charset="ISO-8859-1">
 <title>Registration Page</title>
 </head>
 <body>
-	<h1>Registration Sign-up Form</h1>
+<div>
+	<h1>Registration</h1>
         <form action="register" method="post">
             <table style="with: 100%">
 				<tr>
@@ -66,5 +68,6 @@ var check = function() {
             <input type="submit" value="Register" /> <span style ="color:red">${errorRegistration} </span>
         </form>
         <p>Already have an account? <a href="LoginForm.jsp">Login Here.</a>
+</div>
 </body>
 </html>
