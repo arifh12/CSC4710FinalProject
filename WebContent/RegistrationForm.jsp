@@ -17,13 +17,13 @@
 		} */
 	</script>
 <meta charset="ISO-8859-1">
-<title>Registration Page</title>
+<title>Sunset Images</title>
 </head>
 <body>
-<div>
-	<h1>Registration</h1>
+<div class="loginDiv">
+	<h1 class="loginH1">Registration</h1>
         <form action="register" method="post">
-            <table style="with: 100%">
+            <table style="width: 100%">
 				<tr>
                     <td>First Name</td>
                     <td><input type="text" name="fname" placeholder="John" value="${user.getFirstName()}"/></td>
@@ -40,7 +40,7 @@
                 </tr>
 				<tr>
                     <td>Gender</td>
-                    <td><select id="gender">
+                    <td><select id="gender" class="genderSelect">
                     	<option value=""></option>
   						<option value="Male">Male</option>
   						<option value="Female">Female</option>
@@ -65,7 +65,7 @@
                     <span id='message'></span></td>
                 </tr>
             </table>
-            <input type="submit" value="Register" /> <span style ="color:red">${errorRegistration} </span>
+            <input type="submit" class="loginBtn" value="Register" /> <span style ="color:red">${errorRegistration} </span>
         </form>
         <p>Already have an account? <a href="LoginForm.jsp">Login Here.</a>
 </div>

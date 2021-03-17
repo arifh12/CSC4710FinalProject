@@ -11,28 +11,11 @@ public class InitializeDB {
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
 	
-	private String url = "jdbc:mysql://localhost/";
-	private final String USER = "john";
-	private final String PASS = "pass1234";
-	
 	public InitializeDB() {}
 	
-	private void connect() {
-		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection(url, USER, PASS);
-		} catch (SQLException | ClassNotFoundException e) {
-			System.out.println(e.getMessage());
-		}
-		
-		if (conn == null)
-			System.out.println("*****CONNECTION FAILED****");
-		else
-			System.out.println("*****ESTABLISHED CONNECTION****");
-	}
-	
 	public void initialize() throws SQLException {	
-		connect();
+		conn = DBConnector.createConnection();
+		
 		String[] sqlArr = {
 				"DROP DATABASE IF EXISTS sunsetdb;",
 				"CREATE DATABASE IF NOT EXISTS sunsetdb;"
@@ -42,11 +25,8 @@ public class InitializeDB {
 			st = conn.createStatement();
 			st.execute(sql);
 		}
-		
-		String s = "sunsetdb?useSSL=false";
-		if (!url.contains(s))
-			url += s;
-		connect();
+
+		conn = DBConnector.getConnection();
 		
 		createTables();
 		populateTables();
@@ -57,6 +37,8 @@ public class InitializeDB {
 	}
 	
 	private void createTables() throws SQLException {
+		conn = DBConnector.getConnection();
+		
 		String[] sqlArr = {
 				"create table user ("
 				+ "	   username varchar(40),"
@@ -69,9 +51,9 @@ public class InitializeDB {
 				+ ");",
 				"create table image ("
 				+ "		image_id int auto_increment,"
-				+ "     url varchar(100),"
+				+ "     url varchar(200),"
 				+ "     description varchar(100),"
-				+ "     posted_at timestamp default current_timestamp,"
+				+ "     posted_at timestamp,"
 				+ "     post_user varchar(40) not null,"
 				+ "     foreign key(post_user) references user(username),"
 				+ "     primary key(image_id)"
@@ -122,7 +104,7 @@ public class InitializeDB {
 				new User("psherman@gmail.com", "42wallabyway", "P.", "Sherman", "Other", "2003-05-30"),
 				
 				new User("bruce@batman.com", "brucew", "Bruce", "Wayne", "Male", "2000-06-12"),
-				new User("robin@batman.com", "robinh", "Ronin", "Hood", "Male", "2000-01-01"),
+				new User("robin@batman.com", "robinh", "Robin", "Hood", "Male", "2000-01-01"),
 				new User("joker@batman.com", "jokerc", "Joker", "Clown", "Other", "1998-09-09"),
 			
 				new User("familyguy@fox.com", "peterg", "Peter", "Griffin", "Male", "2002-03-15"),
@@ -131,19 +113,19 @@ public class InitializeDB {
 				new User("taylor@fox.com", "taylors", "Taylor", "Swift", "Female", "2006-02-15"),
 			};
 		
-		String[][] testImages = {
-				{"coolimage.png", "This is a cool image.", "arif123@hasan.com"},
-				{"sunny_picture.jpg", "Picture of a sunny view.", "arif123@hasan.com"},
-				{"evening-sun.svg", "A view of the sun this evening.", "ahtesamul123@haque.com"},
+		Image[] testImages = {
+				new Image("https://d25tv1xepz39hi.cloudfront.net/2020-06-01/files/natural-light-sunset-beach_2044-01.jpg", "This is a cool image.", "2012-10-05 12:54:29", "arif123@hasan.com"),
+				new Image("https://media.cntraveler.com/photos/545d0f4b0a0711b245b6d556/master/w_2048,h_1536,c_limit/new-york-city-sunsets-bushwick-inlet-park.jpg", "Picture of a sunny view.", "2016-12-18 09:14:38", "arif123@hasan.com"),
+				new Image("https://earthsky.org/upl/2013/09/sunrise-red-sea-Graham-Telford-e1489764712368.jpg", "A view of the sun this evening.", "2010-01-02 16:45:09", "ahtesamul123@haque.com"),
 				
-				{"sunset_batman.jpg", "Batman watching the sunset!", "bruce@batman.com"},
-				{"robin-pic.png", "Robin admiring the sunny day.", "robin@batman.com"},
-				{"dog.svg", "Brian walking in the park.", "brian@fox.com"},
+				new Image("sunset_batman.jpg", "Batman watching the sunset!", "2017-10-15 19:33:25", "bruce@batman.com"),
+				new Image("https://img.freepik.com/free-photo/beautiful-colorful-sunset_1048-2416.jpg", "Admiring the sunny day.", "2011-08-12 21:58:08", "robin@batman.com"),
+				new Image("dog.svg", "Brian walking in the park.", "2014-04-16 20:19:46", "brian@fox.com"),
 				
-				{"prom.png", "Meg on prom day.", "meg@fox.com"},
-				{"first_concert.jpg", "Taylor's first outdoor concert.", "taylor@fox.com"},
-				{"lake.svg", "A view of the lake.", "psherman@gmail.com"},
-				{"hiking-sunset.svg", "Hiking in a while the sun sets.", "familyguy@fox.com"}		
+				new Image("prom.png", "Meg on prom day.", "2016-06-20 17:13:58", "meg@fox.com"),
+				new Image("https://free4kwallpapers.com/uploads/originals/2020/04/12/contrast-birds-at-sunset-wallpaper.jpg", "Watching the birds fly in the sunset.", "2019-05-04 21:22:48", "taylor@fox.com"),
+				new Image("lake.svg", "A view of the lake.", "2014-05-21 16:24:49", "psherman@gmail.com"),
+				new Image("https://cdn.pixabay.com/photo/2019/03/29/18/31/sunset-4089845_960_720.jpg", "Hiking while the sun sets.", "2015-11-20 19:34:41", "familyguy@fox.com")		
 			};
 		
 		String[][] testImageTags = {
@@ -219,8 +201,9 @@ public class InitializeDB {
 		}
 		
 		// Inserting 10 realistic tuples into image table
-		for (String[] image : testImages) {
-			insertImage(image[0], image[1], image[2]);
+		ImageDAO imageDAO = new ImageDAO();
+		for (Image image : testImages) {
+			imageDAO.insert(image);
 		}
 		
 		// Inserting 10 realistic tuples into image_tag table
@@ -244,17 +227,6 @@ public class InitializeDB {
 		}
 		
 		System.out.println("*****TUPLES HAVE BEEN INSERTED INTO sunsetdb****");
-	}
-	
-	private void insertImage(String url, String description, String postUser) throws SQLException {
-		String sql = "INSERT INTO image(url, description, post_user) VALUES(?,?,?)";
-		
-		ps = conn.prepareStatement(sql);
-		ps.setString(1, url);
-		ps.setString(2, description);
-		ps.setString(3, postUser);
-		
-		ps.executeUpdate();
 	}
 	
 	private void insertImageTag(int imageId, String tag) throws SQLException  {

@@ -1,6 +1,12 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,17 +14,20 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserDAO userDAO;
 	private InitializeDB db;
+	private ImageDAO imageDAO;
 	private final String USER_ROOT = "root";
 	private final String PASS_ROOT = "pass1234";
 	
 	public void init() {
 		userDAO = new UserDAO();
 		db = new InitializeDB();
+		imageDAO = new ImageDAO();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -36,11 +45,17 @@ public class ControlServlet extends HttpServlet {
 				break;
 			case "/initialize":
 				db.initialize();
-				RequestDispatcher rd = request.getRequestDispatcher("HomePage.jsp");
+				RequestDispatcher rd = request.getRequestDispatcher("LoginForm.jsp");
 				rd.forward(request, response);
 				break;
 			case "/register":
 				processRegister(request, response);
+				break;
+			case "/feed":
+				loadFeedPage(request, response);
+				break;
+			case "/insert-image":
+				insertImage(request, response);
 				break;
 			default:
 				System.out.println("error");
@@ -59,7 +74,8 @@ public class ControlServlet extends HttpServlet {
 			rd = request.getRequestDispatcher("Initialization.jsp");
 		} 
 		else if (userDAO.login(username, password)) {
-			rd = request.getRequestDispatcher("HomePage.jsp");
+			request.getSession().setAttribute("username", username);
+			rd = request.getRequestDispatcher("/feed");
 		} else {
 			request.setAttribute("errorLogin", "Invalid user credentials!");
 			rd = request.getRequestDispatcher("LoginForm.jsp");
@@ -85,7 +101,7 @@ public class ControlServlet extends HttpServlet {
 			if(userDAO.insert(user)) {
 				System.out.println("***USER INSERTED SUCCESSFULLY***");
 				user.toString();
-				rd = request.getRequestDispatcher("HomePage.jsp");
+				rd = request.getRequestDispatcher("/feed");
 			} else {
 				System.out.println("***DUPLICATE USERNAME***");
 				request.setAttribute("user", user);
@@ -101,7 +117,43 @@ public class ControlServlet extends HttpServlet {
 		
 		rd.forward(request, response);
 	}
+	
+	private void loadFeedPage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		ArrayList<Image> images = imageDAO.getImageList(username);
+		request.setAttribute("imageList", images);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("FeedPage.jsp");
+		rd.forward(request, response);		
+	}
 
+	private void insertImage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		String url = request.getParameter("url");
+		String tags = request.getParameter("tags");
+		String description = request.getParameter("description");
+		String postedAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		RequestDispatcher rd;
+		
+		if (url.isBlank()) {
+			request.setAttribute("errorNewPost", "Invalid URL");
+			rd = request.getRequestDispatcher("NewPostForm.jsp");
+		} else {
+			List<String> tagList = Arrays.asList(tags.split(", "));
+		
+			Image img = new Image();
+			img.setUrl(url);
+			img.setDescription(description);
+			img.setTags(tagList);
+			img.setPostUser(username);
+			img.setPostedAt(postedAt);
+		
+			imageDAO.insert(img);
+			rd = request.getRequestDispatcher("/feed");
+		}
+		
+		rd.forward(request, response);	
+	}
 }
 
 

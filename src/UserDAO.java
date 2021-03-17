@@ -11,25 +11,10 @@ public class UserDAO {
 	private PreparedStatement ps = null;
 	private ResultSet rs = null;
 
-	public UserDAO() {
-	}
-
-	private void connect() throws SQLException {
-		if (conn == null || conn.isClosed()) {
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				conn = (Connection) DriverManager.getConnection(
-						"jdbc:mysql://127.0.0.1:3306/sunsetdb?" + "useSSL=false&user=john&password=pass1234");
-			} catch (SQLException | ClassNotFoundException e) {
-				System.out.println(e.getMessage());
-			} finally {
-				System.out.println(conn);
-			}
-		}
-	}
+	public UserDAO() {}
 
 	public boolean insert(User user) throws SQLException {
-		connect();
+		conn = DBConnector.getConnection();
 
 		if (!isDuplicate(user.getUsername())) {
 			String sql = "INSERT into user(username, password, first_name, last_name, gender, birthday) VALUES(?, ?, ?, ?, ?, ?);";
@@ -50,7 +35,7 @@ public class UserDAO {
 
 	// TODO: make this class return a User object!!!!!
 	public boolean login(String username, String password) throws SQLException {
-		connect();
+		conn = DBConnector.getConnection();
 
 		String sql = "SELECT * FROM user WHERE username=? AND password=?;";
 
@@ -77,6 +62,7 @@ public class UserDAO {
 	}
 
 	public boolean isDuplicate(String username) throws SQLException {
+		//TODO change this to statement
 		String sql = "SELECT * FROM user WHERE username=?;";
 
 		ps = conn.prepareStatement(sql);
@@ -84,6 +70,29 @@ public class UserDAO {
 		rs = ps.executeQuery();
 
 		return rs.next();
+	}
+	
+	public User getUser(String username) throws SQLException {
+		conn = DBConnector.getConnection();
+		
+		String sql = "SELECT * FROM user WHERE username='" + username + "';";
+		User user = null;
+		
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		while (rs.next()) {
+			String uname = rs.getString("username");
+			String pass = rs.getString("password");
+			String fname = rs.getString("first_name");
+			String lname = rs.getString("last_name");
+			String gender = rs.getString("gender");
+			String bday = rs.getString("birthday");
+			
+			user = new User(uname, pass, fname, lname, gender, bday);
+		}
+		
+		return user;		
 	}
 
 	private void disconnect() throws SQLException {

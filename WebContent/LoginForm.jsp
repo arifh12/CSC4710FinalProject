@@ -8,8 +8,9 @@
 	<style><%@include file="MainStyle.css"%></style>
 </head>
 <body>
-	<div>
-		<h1>Welcome</h1>
+	<div class="loginDiv">
+		<img class="logo" src="https://www.sunsetwatchfamilycampground.com/wp-content/uploads/2019/10/Sunset-Logo-2.png" width="200"/>
+		<h1 class="loginH1">Welcome</h1>
 		<form action="login" method="post">
 			<table style="width: 100%">
 				<tr>				
@@ -20,7 +21,7 @@
 				</tr>
 
 			</table>
-			<br> <input type="submit" value="Login" /> <span
+			<br> <input type="submit" class="loginBtn" value="Login" /> <span
 				style="color: red">${errorLogin} </span>
 			<p>
 				New User? Register for an account. <a href="RegistrationForm.jsp">Register Here.</a>
