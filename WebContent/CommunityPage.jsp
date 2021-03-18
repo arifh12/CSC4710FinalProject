@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Sunset Images - New Post</title>
+	<title>Sunset Images - Community</title>
 	<style><%@include file="MainStyle.css"%></style>
 </head>
 <body>
@@ -15,25 +16,26 @@
 		<a class="navLink" id="newPost" href="NewPostForm.jsp">New Post</a>
 		<a class="navLink" href="LoginForm.jsp">Log Out</a>
 	</nav>
-	<form action="insert-image" method="post">
-	<div class="loginDiv">
+	<div class="feedDiv">
+	<form action="search" method="get">
+		<label>Search: </label>
+		<input type="text" name="search-field" required>
+		<input type="submit" value="Search">
+	</form>
 	<table>
+		<c:forEach items="${userList}" var="userC">
 		<tr>
-			<td>Image URL: </td>
-			<td><input type="url" name=url required /> </td>
+			<td>
+				${userC.getFirstName()} ${userC.getLastName()}
+			</td>
+			<td>
+				<c:if test="${username != userC.getUsername()}">
+					<a href="follow?following-user=<c:out value='${userC.getUsername()}'/>">Follow</a>	
+				</c:if>
+			</td>
 		</tr>
-		<tr>
-			<td>Description: </td>
-			<td><input type="text" name=description /> </td>
-		</tr>
-		<tr>
-			<td>Tags: </td>
-			<td><input type="text" name=tags placeholder="separate, tags, like, this"/> </td>
-		</tr>
-		<tr>
-			<td><input type="submit" value="Post" /><span style="color: red">${errorNewPost}</span>
+		</c:forEach>
 	</table>
 	</div>
-	</form>
 </body>
 </html>

@@ -12,7 +12,7 @@
 	<nav>
 		<img class="navLink" id="navLogo" src="https://www.sunsetwatchfamilycampground.com/wp-content/uploads/2019/10/Sunset-Logo-2.png" width="150"/>
 		<a class="navLink" href="feed">Feed</a>
-		<a class="navLink" href="#">Community</a>
+		<a class="navLink" href="community">Community</a>
 		<a class="navLink" id="newPost" href="NewPostForm.jsp">New Post</a>
 		<a class="navLink" href="LoginForm.jsp">Log Out</a>
 	</nav>
@@ -25,6 +25,12 @@
 				<br>
 				<p>
 					<img id="postImg" src="${image.getUrl()}" alt="Uh-oh. Something went wrong!" />
+				</p>
+				<p>
+					<c:if test="${username eq image.getPostUser()}">
+						<a href="delete?image-id=<c:out value='${image.getImageId()}'/>" >Delete</a>
+						<a href="edit?image-id=<c:out value='${image.getImageId()}'/>" >Edit</a>
+					</c:if>
 				</p>
 				<hr>
 			</c:forEach>

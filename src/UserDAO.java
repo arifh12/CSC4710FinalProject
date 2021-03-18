@@ -3,6 +3,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.DriverManager;
 
 public class UserDAO {
@@ -72,11 +74,16 @@ public class UserDAO {
 		return rs.next();
 	}
 	
-	public User getUser(String username) throws SQLException {
+	public List<User> getUsers(String name) throws SQLException {
 		conn = DBConnector.getConnection();
+		String sql;
 		
-		String sql = "SELECT * FROM user WHERE username='" + username + "';";
-		User user = null;
+		if (name == null || name.isBlank())
+			sql = "SELECT * FROM user;";
+		else
+			sql = "select * from user where '"+ name +"' in(first_name, last_name, concat(first_name,' ',last_name));";
+		
+		List<User> userList = new ArrayList<>();
 		
 		st = conn.createStatement();
 		rs = st.executeQuery(sql);
@@ -89,10 +96,11 @@ public class UserDAO {
 			String gender = rs.getString("gender");
 			String bday = rs.getString("birthday");
 			
-			user = new User(uname, pass, fname, lname, gender, bday);
+			User user = new User(uname, pass, fname, lname, gender, bday);
+			userList.add(user);
 		}
 		
-		return user;		
+		return userList;
 	}
 
 	private void disconnect() throws SQLException {

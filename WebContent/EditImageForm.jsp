@@ -4,7 +4,7 @@
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Sunset Images - New Post</title>
+	<title>Sunset Images - Edit Image</title>
 	<style><%@include file="MainStyle.css"%></style>
 </head>
 <body>
@@ -15,20 +15,21 @@
 		<a class="navLink" id="newPost" href="NewPostForm.jsp">New Post</a>
 		<a class="navLink" href="LoginForm.jsp">Log Out</a>
 	</nav>
-	<form action="insert-image" method="post">
+	<form action="update-image" method="post">
 	<div class="loginDiv">
+	<input type="hidden" name="image-id" value="${image.getImageId()}" />
 	<table>
 		<tr>
 			<td>Image URL: </td>
-			<td><input type="url" name=url required /> </td>
+			<td><input type="url" name=url value="${image.getUrl()}" required/> </td>
 		</tr>
 		<tr>
 			<td>Description: </td>
-			<td><input type="text" name=description /> </td>
+			<td><input type="text" value="${image.getDescription()}" name=description /> </td>
 		</tr>
 		<tr>
 			<td>Tags: </td>
-			<td><input type="text" name=tags placeholder="separate, tags, like, this"/> </td>
+			<td><input type="text" value="${tags}" name=tags placeholder="separate, tags, like, this"/> </td>
 		</tr>
 		<tr>
 			<td><input type="submit" value="Post" /><span style="color: red">${errorNewPost}</span>

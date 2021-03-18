@@ -57,6 +57,20 @@ public class ControlServlet extends HttpServlet {
 			case "/insert-image":
 				insertImage(request, response);
 				break;
+			case "/community":
+				loadCommunityPage(request, response);
+				break;
+			case "/search":
+				getSearchedUser(request, response);
+				break;
+			case "/delete":
+				deleteImage(request, response);
+				break;
+			case "/edit":
+				showEditForm(request, response);
+				break;
+			case "/update-image":
+				updateImage(request, response);
 			default:
 				System.out.println("error");
 			}
@@ -154,9 +168,70 @@ public class ControlServlet extends HttpServlet {
 		
 		rd.forward(request, response);	
 	}
+	
+	public void loadCommunityPage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		List<User> userList = userDAO.getUsers("");
+		
+		request.setAttribute("userList", userList);
+		RequestDispatcher rd = request.getRequestDispatcher("CommunityPage.jsp");
+		
+		rd.forward(request, response);
+	}
+	
+	public void getSearchedUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		String name = request.getParameter("search-field");
+		List<User> userList = userDAO.getUsers(name);
+		
+		request.setAttribute("userList", userList);
+		RequestDispatcher rd = request.getRequestDispatcher("CommunityPage.jsp");
+		
+		rd.forward(request, response);
+	}
+	
+	public void deleteImage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		int imageId = Integer.parseInt(request.getParameter("image-id"));
+		
+		if (imageDAO.delete(imageId))
+			System.out.println(imageId + " has been deleted successfully!");
+		
+		RequestDispatcher rd = request.getRequestDispatcher("feed");
+		rd.forward(request, response);
+	}
+	
+	public void showEditForm(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		int id = Integer.parseInt(request.getParameter("image-id"));
+		
+		Image img = imageDAO.getImage(id);
+		String tags = String.join(", ", img.getTags());
+		
+		request.setAttribute("tags", tags);
+		request.setAttribute("image", img);
+		RequestDispatcher rd = request.getRequestDispatcher("EditImageForm.jsp");
+		rd.forward(request, response);
+	}
+	
+	public void updateImage(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		int id = Integer.parseInt(request.getParameter("image-id"));
+		String url = request.getParameter("url");
+		String description = request.getParameter("description");
+		String tags = request.getParameter("tags");
+		List<String> tagList = Arrays.asList(tags.split(", "));
+		
+		Image img = new Image();
+		img.setImageId(id);
+		img.setUrl(url);
+		img.setDescription(description);
+		img.setTags(tagList);
+		
+		imageDAO.update(img);
+		
+		response.sendRedirect("feed");
+	}
+	
+	
+	
+	
 }
-
-
 
 
 

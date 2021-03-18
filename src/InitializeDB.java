@@ -62,7 +62,7 @@ public class InitializeDB {
 				+ "		image_id int,"
 				+ "    	tag varchar(20),"
 				+ "   	primary key(image_id, tag),"
-				+ "   	foreign key(image_id) references image(image_id)"
+				+ "   	foreign key(image_id) references image(image_id) on delete cascade"
 				+ ");",
 				"create table likes("
 				+ "		username varchar(40),"
@@ -70,7 +70,7 @@ public class InitializeDB {
 				+ " 	like_date date default (curdate()),"
 				+ "     primary key(username, image_id),"
 				+ "     foreign key(username) references user(username),"
-				+ "     foreign key(image_id) references image(image_id)"
+				+ "     foreign key(image_id) references image(image_id) on delete cascade"
 				+ ");",
 				"create table comments("
 				+ "		username varchar(40),"
@@ -78,7 +78,7 @@ public class InitializeDB {
 				+ " 	message varchar(140),"
 				+ "     primary key(username, image_id),"
 				+ "     foreign key(username) references user(username),"
-				+ "     foreign key(image_id) references image(image_id)"
+				+ "     foreign key(image_id) references image(image_id) on delete cascade"
 				+ ");",
 				"create table follows ("
 				+ "		following_username varchar(40),"
@@ -118,7 +118,7 @@ public class InitializeDB {
 				new Image("https://media.cntraveler.com/photos/545d0f4b0a0711b245b6d556/master/w_2048,h_1536,c_limit/new-york-city-sunsets-bushwick-inlet-park.jpg", "Picture of a sunny view.", "2016-12-18 09:14:38", "arif123@hasan.com"),
 				new Image("https://earthsky.org/upl/2013/09/sunrise-red-sea-Graham-Telford-e1489764712368.jpg", "A view of the sun this evening.", "2010-01-02 16:45:09", "ahtesamul123@haque.com"),
 				
-				new Image("sunset_batman.jpg", "Batman watching the sunset!", "2017-10-15 19:33:25", "bruce@batman.com"),
+				new Image("https://i.redd.it/m87ytedr2fzz.jpg", "Batman watching the sunset!", "2017-10-15 19:33:25", "bruce@batman.com"),
 				new Image("https://img.freepik.com/free-photo/beautiful-colorful-sunset_1048-2416.jpg", "Admiring the sunny day.", "2011-08-12 21:58:08", "robin@batman.com"),
 				new Image("dog.svg", "Brian walking in the park.", "2014-04-16 20:19:46", "brian@fox.com"),
 				
