@@ -67,4 +67,53 @@ public class Interaction {
 		
 		return dailyLikes;
 	}
+	
+	public boolean isFollowing(String following, String follower) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "select * from follows where following_username=? and follower_username=?;";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, following);
+		ps.setString(2, follower);
+		rs = ps.executeQuery();
+		
+		if (rs.next())
+			return true;
+				
+		return false;
+	}
+	
+	public boolean insertFollow(String following, String follower) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "insert into follows(following_username, follower_username) values (?,?);";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, following);
+		ps.setString(2, follower);
+		
+		return ps.executeUpdate() > 0;
+	}
+	
+	public boolean deleteFollow(String following, String follower) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "delete from follows where following_username=? and follower_username=?;"; 
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, following);
+		ps.setString(2, follower);
+		
+		return ps.executeUpdate() > 0;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

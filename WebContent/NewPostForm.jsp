@@ -12,11 +12,13 @@
 		<img class="navLink" id="navLogo" src="https://www.sunsetwatchfamilycampground.com/wp-content/uploads/2019/10/Sunset-Logo-2.png" width="150"/>
 		<a class="navLink" href="feed">Feed</a>
 		<a class="navLink" href="community">Community</a>
+		<a class="navLink" href="profile?target-user=${username}">Profile</a>
 		<a class="navLink" id="newPost" href="NewPostForm.jsp">New Post</a>
 		<a class="navLink" href="LoginForm.jsp">Log Out</a>
 	</nav>
 	<form action="insert-image" method="post">
 	<div class="loginDiv">
+	<h2>Create a New Post</h2>
 	<table>
 		<tr>
 			<td>Image URL: </td>

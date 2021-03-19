@@ -102,7 +102,61 @@ public class UserDAO {
 		
 		return userList;
 	}
-
+	
+	public User getUser(String username) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "select * from user where username='" + username + "';";
+		User user = null;
+		
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		while (rs.next()) {
+			String uname = rs.getString("username");
+			String pass = rs.getString("password");
+			String fname = rs.getString("first_name");
+			String lname = rs.getString("last_name");
+			String gender = rs.getString("gender");
+			String bday = rs.getString("birthday");
+			int followers = getFollowerCount(username);
+			int following = getFollowingCount(username);
+			
+			user = new User(uname, pass, fname, lname, gender, bday);
+			user.setFollowerCount(followers);
+			user.setFollowingCount(following);
+		}
+		
+		return user;
+	}
+	
+	public int getFollowerCount(String username) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "select count(*) from follows where following_username='" + username + "';";
+		int followers = 0;
+		
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		if (rs.next()) {
+			followers = rs.getInt(1);
+		}
+		
+		return followers;
+		
+	}public int getFollowingCount(String username) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "select count(*) from follows where follower_username='" + username + "';";
+		int following = 0;
+		
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		if (rs.next()) {
+			following = rs.getInt(1);
+		}
+		
+		return following;
+	}
 	
 	private void disconnect() throws SQLException {
 		if (st != null && !st.isClosed())

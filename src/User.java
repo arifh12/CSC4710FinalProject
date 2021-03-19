@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 public class User {
 	private String username, password, firstName, lastName, birthday, gender;
+	private int followerCount, followingCount;
+	private boolean followStatus;
 
 	public User() {}
 
@@ -62,4 +64,27 @@ public class User {
 		this.gender = gender;
 	}
 	
+	public int getFollowerCount() {
+		return followerCount;
+	}
+
+	public void setFollowerCount(int followerCount) {
+		this.followerCount = followerCount;
+	}
+
+	public int getFollowingCount() {
+		return followingCount;
+	}
+
+	public void setFollowingCount(int followingCount) {
+		this.followingCount = followingCount;
+	}
+	
+	public boolean getFollowStatus() {
+		return followStatus;
+	}
+
+	public void setFollowStatus(boolean followStatus) {
+		this.followStatus = followStatus;
+	}
 }

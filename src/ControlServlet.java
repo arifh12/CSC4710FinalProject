@@ -80,6 +80,15 @@ public class ControlServlet extends HttpServlet {
 			case "/unlike":
 				unlikeImage(request, response);
 				break;
+			case "/profile":
+				viewProfile(request, response);
+				break;
+			case "/follow":
+				followUser(request, response);
+				break;
+			case "/unfollow":
+				unfollowUser(request, response);
+				break;
 			default:
 				System.out.println("error");
 			}
@@ -103,9 +112,9 @@ public class ControlServlet extends HttpServlet {
 			request.setAttribute("errorLogin", "Invalid user credentials!");
 			rd = request.getRequestDispatcher("LoginForm.jsp");
 		}
+		System.out.println(username + ", " + password);
 			
 		rd.forward(request, response);
-		System.out.println(username + ", " + password);
 	}
 	
 	private void processRegister(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
@@ -124,7 +133,7 @@ public class ControlServlet extends HttpServlet {
 			if(userDAO.insert(user)) {
 				System.out.println("***USER INSERTED SUCCESSFULLY***");
 				user.toString();
-				rd = request.getRequestDispatcher("/feed");
+				rd = request.getRequestDispatcher("/login");
 			} else {
 				System.out.println("***DUPLICATE USERNAME***");
 				request.setAttribute("user", user);
@@ -153,7 +162,6 @@ public class ControlServlet extends HttpServlet {
 		
 		request.setAttribute("imageList", images);
 		request.setAttribute("likes", likes);
-		
 		
 		RequestDispatcher rd = request.getRequestDispatcher("FeedPage.jsp");
 		rd.forward(request, response);		
@@ -268,6 +276,38 @@ public class ControlServlet extends HttpServlet {
 		}
 	}
 	
+	private void viewProfile(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		String targetUser = request.getParameter("target-user");
+		User userProfile = userDAO.getUser(targetUser);
+		
+		boolean isFollowing = interaction.isFollowing(targetUser, username);
+		userProfile.setFollowStatus(isFollowing);
+		
+		request.setAttribute("userProfile", userProfile);
+		RequestDispatcher rd = request.getRequestDispatcher("ProfilePage.jsp");
+		rd.forward(request, response);
+	}
+	
+	private void followUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		String targetUser = request.getParameter("target-user");
+		
+		interaction.insertFollow(targetUser, username);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
+		rd.forward(request, response);
+	}
+	
+	private void unfollowUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		String targetUser = request.getParameter("target-user");
+		
+		interaction.deleteFollow(targetUser, username);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
+		rd.forward(request, response);
+	}
 }
 
 

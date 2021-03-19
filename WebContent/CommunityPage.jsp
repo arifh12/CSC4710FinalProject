@@ -13,13 +13,14 @@
 		<img class="navLink" id="navLogo" src="https://www.sunsetwatchfamilycampground.com/wp-content/uploads/2019/10/Sunset-Logo-2.png" width="150"/>
 		<a class="navLink" href="feed">Feed</a>
 		<a class="navLink" href="community">Community</a>
+		<a class="navLink" href="profile?target-user=${username}">Profile</a>
 		<a class="navLink" id="newPost" href="NewPostForm.jsp">New Post</a>
 		<a class="navLink" href="LoginForm.jsp">Log Out</a>
 	</nav>
 	<div class="feedDiv">
+	<h2>Community Page</h2>
 	<form action="search" method="get">
-		<label>Search: </label>
-		<input type="text" name="search-field" required>
+		<input type="text" name="search-field" placeholder="Search by first name, last name, or both..." required>
 		<input type="submit" value="Search">
 	</form>
 	<table>
@@ -33,7 +34,7 @@
 			</td>
 			<td>
 				<c:if test="${username != userC.getUsername()}">
-					<a href="follow?following-user=<c:out value='${userC.getUsername()}'/>">Follow</a>	
+					<a href="profile?target-user=${userC.getUsername()}">View Profile</a>	
 				</c:if>
 			</td>
 		</tr>
