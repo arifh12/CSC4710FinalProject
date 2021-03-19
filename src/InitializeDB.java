@@ -149,12 +149,12 @@ public class InitializeDB {
 				{"ahtesamul123@haque.com", "1", "2009-11-05"},
 				
 				{"bruce@batman.com", "5", "2012-05-03"},
-				{"robin@batman.com", "9", "2019-03-15"},
+				{"robin@batman.com", "1", "2019-03-15"},
 				{"brian@fox.com", "2", "2003-10-10"},
 				
 				{"meg@fox.com", "6", "2017-06-29"},
 				{"taylor@fox.com", "10", "2011-01-30"},
-				{"psherman@gmail.com", "4", "2005-12-25"},
+				{"psherman@gmail.com", "8", "2005-12-25"},
 				{"familyguy@fox.com", "7", "2008-09-08"},
 				
 				//TODO: add more rows. second column must be between 1 and 10.
@@ -180,6 +180,9 @@ public class InitializeDB {
 		String[][] testFollows = {
 				{"arif123@hasan.com", "ahtesamul123@haque.com"},
 				{"ahtesamul123@haque.com", "arif123@hasan.com"},
+				{"taylor@fox.com", "arif123@hasan.com"},
+				{"bruce@batman.com", "arif123@hasan.com"},
+				{"robin@batman.com", "arif123@hasan.com"},
 				{"ahtesamul123@haque.com", "bruce@batman.com"},
 				
 				{"robin@batman.com", "bruce@batman.com"},

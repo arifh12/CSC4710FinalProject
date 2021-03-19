@@ -1,10 +1,19 @@
 import java.util.List;
 
 public class Image {
-	private int imageId;
+	private int imageId, likes;
 	private String url, description, postedAt, postUser;
 	private List<String> tags = null;
+	private boolean likeStatus = false;
 	
+	public boolean getLikeStatus() {
+		return likeStatus;
+	}
+
+	public void setLikeStatus(boolean likeStatus) {
+		this.likeStatus = likeStatus;
+	}
+
 	public Image() {}
 
 	public Image(String url, String description, String postedAt, String postUser) {
@@ -59,5 +68,13 @@ public class Image {
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+	
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likeCount) {
+		this.likes = likeCount;
 	}
 }

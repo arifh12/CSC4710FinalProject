@@ -17,6 +17,7 @@
 		<a class="navLink" href="LoginForm.jsp">Log Out</a>
 	</nav>
 		<div class="feedDiv">
+			<span style="color:red">${likeError}</span>
 			<c:forEach items="${imageList}" var="image">
 				<div class="postHeader">
 					<p id="postUser">${image.getPostUser()}: ${image.getDescription()}</p>
@@ -27,10 +28,14 @@
 					<img id="postImg" src="${image.getUrl()}" alt="Uh-oh. Something went wrong!" />
 				</p>
 				<p>
+					<label>Likes: ${image.getLikes()} </label>
 					<c:if test="${username eq image.getPostUser()}">
 						<a href="delete?image-id=<c:out value='${image.getImageId()}'/>" >Delete</a>
 						<a href="edit?image-id=<c:out value='${image.getImageId()}'/>" >Edit</a>
 					</c:if>
+				</p>
+				<p>
+					<a href="<c:out value="${image.getLikeStatus() ? 'unlike' : 'like'}" />?image-id=<c:out value='${image.getImageId()}'/>" ><c:out value="${image.getLikeStatus() ? 'Unlike' : 'Like'}" /></a>
 				</p>
 				<hr>
 			</c:forEach>

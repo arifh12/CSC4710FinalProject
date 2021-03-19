@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class User {
 	private String username, password, firstName, lastName, birthday, gender;
 
@@ -59,6 +61,5 @@ public class User {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	
 	
 }

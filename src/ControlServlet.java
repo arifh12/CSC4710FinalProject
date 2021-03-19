@@ -21,6 +21,7 @@ public class ControlServlet extends HttpServlet {
 	private UserDAO userDAO;
 	private InitializeDB db;
 	private ImageDAO imageDAO;
+	private Interaction interaction;
 	private final String USER_ROOT = "root";
 	private final String PASS_ROOT = "pass1234";
 	
@@ -28,6 +29,7 @@ public class ControlServlet extends HttpServlet {
 		userDAO = new UserDAO();
 		db = new InitializeDB();
 		imageDAO = new ImageDAO();
+		interaction = new Interaction();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -71,6 +73,13 @@ public class ControlServlet extends HttpServlet {
 				break;
 			case "/update-image":
 				updateImage(request, response);
+				break;
+			case "/like":
+				likeImage(request, response);
+				break;
+			case "/unlike":
+				unlikeImage(request, response);
+				break;
 			default:
 				System.out.println("error");
 			}
@@ -135,7 +144,16 @@ public class ControlServlet extends HttpServlet {
 	private void loadFeedPage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
 		String username = (String) request.getSession().getAttribute("username");
 		ArrayList<Image> images = imageDAO.getImageList(username);
+		ArrayList<Integer> likes = interaction.getUserLikesList(username);
+		
+		for (Image img : images) {
+			if(likes.contains(img.getImageId()))
+				img.setLikeStatus(true);
+		}
+		
 		request.setAttribute("imageList", images);
+		request.setAttribute("likes", likes);
+		
 		
 		RequestDispatcher rd = request.getRequestDispatcher("FeedPage.jsp");
 		rd.forward(request, response);		
@@ -228,8 +246,27 @@ public class ControlServlet extends HttpServlet {
 		response.sendRedirect("feed");
 	}
 	
+	private void likeImage(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+		String username = (String) request.getSession().getAttribute("username");
+		int id = Integer.parseInt(request.getParameter("image-id"));
+		
+		if (interaction.insertLike(username, id)) {
+			response.sendRedirect("feed");
+		} else {
+			request.setAttribute("likeError", "Daily like limit reached!");
+			RequestDispatcher rd = request.getRequestDispatcher("feed");
+			rd.forward(request, response);
+		}
+	}
 	
-	
+	private void unlikeImage(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		int id = Integer.parseInt(request.getParameter("image-id"));
+		
+		if (interaction.deleteLike(username, id)) {
+			response.sendRedirect("feed");
+		}
+	}
 	
 }
 

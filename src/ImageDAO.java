@@ -55,10 +55,12 @@ public class ImageDAO {
 			String description = rs.getString("description");
 			String postedAt = rs.getString("posted_at");
 			String postUser = rs.getString("post_user");
-			ArrayList<String> tags = getTags(id);			
+			ArrayList<String> tags = getTags(id);		
+			int likes = getLikeCount(id);
 			
 			img = new Image(id, url, description, postedAt, postUser);
 			img.setTags(tags);
+			img.setLikes(likes);
 		}
 		
 		return img;
@@ -86,9 +88,11 @@ public class ImageDAO {
 			String postedAt = rs.getString("posted_at");
 			String postUser = rs.getString("post_user");
 			ArrayList<String> tags = getTags(id);
+			int likes = getLikeCount(id);
 			
 			Image img = new Image(id, url, description, postedAt, postUser);
 			img.setTags(tags);
+			img.setLikes(likes);
 			images.add(img);
 		}
 		
@@ -150,6 +154,19 @@ public class ImageDAO {
 		}
 	
 		ps.executeBatch();
+	}
+	
+	public int getLikeCount(int id) throws SQLException {
+		String sql = "select count(*) from likes where image_id=?;";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setInt(1, id);
+		ResultSet resultSet = ps.executeQuery();
+		
+		if(resultSet.next())
+			return resultSet.getInt(1);
+		else
+			return -1;
 	}
 }
 

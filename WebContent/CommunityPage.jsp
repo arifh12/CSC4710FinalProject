@@ -29,6 +29,9 @@
 				${userC.getFirstName()} ${userC.getLastName()}
 			</td>
 			<td>
+				(${userC.getUsername()})
+			</td>
+			<td>
 				<c:if test="${username != userC.getUsername()}">
 					<a href="follow?following-user=<c:out value='${userC.getUsername()}'/>">Follow</a>	
 				</c:if>
