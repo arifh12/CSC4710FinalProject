@@ -120,7 +120,7 @@ public class InitializeDB {
 				
 				new Image("https://i.redd.it/m87ytedr2fzz.jpg", "Batman watching the sunset!", "2017-10-15 19:33:25", "bruce@batman.com"),
 				new Image("https://img.freepik.com/free-photo/beautiful-colorful-sunset_1048-2416.jpg", "Admiring the sunny day.", "2011-08-12 21:58:08", "robin@batman.com"),
-				new Image("https://wallup.net/wp-content/uploads/2018/10/07/219250-dog-sunset-748x468.jpg", "Brian walking in the park.", "2014-04-16 20:19:46", "brian@fox.com"),
+				new Image("https://p0.pikist.com/photos/406/146/wondering-dog-sunset-animal-outdoor-summer-breathtaking-canine-landscape.jpg", "Brian walking in the park.", "2014-04-16 20:19:46", "brian@fox.com"),
 				
 				new Image("https://www.denverpost.com/wp-content/uploads/2020/08/TDP-L-SMOKY_-SUNSET_094.jpg", "Loving the sunset today!", "2016-06-20 17:13:58", "meg@fox.com"),
 				new Image("https://free4kwallpapers.com/uploads/originals/2020/04/12/contrast-birds-at-sunset-wallpaper.jpg", "Watching the birds fly in the sunset.", "2019-05-04 21:22:48", "taylor@fox.com"),

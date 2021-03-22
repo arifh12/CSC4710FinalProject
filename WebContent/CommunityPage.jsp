@@ -27,14 +27,15 @@
 		<c:forEach items="${userList}" var="userC">
 		<tr>
 			<td>
-				${userC.getFirstName()} ${userC.getLastName()}
+				<a href="profile?target-user=${userC.getUsername()}">${userC.getFirstName()} ${userC.getLastName()}</a>
 			</td>
 			<td>
 				(${userC.getUsername()})
 			</td>
 			<td>
 				<c:if test="${username != userC.getUsername()}">
-					<a href="profile?target-user=${userC.getUsername()}">View Profile</a>	
+					<a href="${userC.getFollowStatus() ? 'unfollow' : 'follow'}?target-user=${userC.getUsername()}" >
+						${userC.getFollowStatus() ? 'Unfollow' : 'Follow'}</a>
 				</c:if>
 			</td>
 		</tr>

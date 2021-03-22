@@ -74,7 +74,7 @@ public class UserDAO {
 		return rs.next();
 	}
 	
-	public List<User> getUsers(String name) throws SQLException {
+	public List<User> getUsers(String name, String username) throws SQLException {
 		conn = DBConnector.getConnection();
 		String sql;
 		
@@ -84,6 +84,7 @@ public class UserDAO {
 			sql = "select * from user where '"+ name +"' in(first_name, last_name, concat(first_name,' ',last_name));";
 		
 		List<User> userList = new ArrayList<>();
+		Interaction i = new Interaction();
 		
 		st = conn.createStatement();
 		rs = st.executeQuery(sql);
@@ -95,18 +96,21 @@ public class UserDAO {
 			String lname = rs.getString("last_name");
 			String gender = rs.getString("gender");
 			String bday = rs.getString("birthday");
+			boolean follows = i.isFollowing(uname, username);
 			
 			User user = new User(uname, pass, fname, lname, gender, bday);
+			user.setFollowStatus(follows);
 			userList.add(user);
 		}
 		
 		return userList;
 	}
 	
-	public User getUser(String username) throws SQLException {
+	public User getUser(String username, String currUser) throws SQLException {
 		conn = DBConnector.getConnection();
 		String sql = "select * from user where username='" + username + "';";
 		User user = null;
+		Interaction i = new Interaction();
 		
 		st = conn.createStatement();
 		rs = st.executeQuery(sql);
@@ -120,10 +124,12 @@ public class UserDAO {
 			String bday = rs.getString("birthday");
 			int followers = getFollowerCount(username);
 			int following = getFollowingCount(username);
+			boolean follows = i.isFollowing(username, currUser);
 			
 			user = new User(uname, pass, fname, lname, gender, bday);
 			user.setFollowerCount(followers);
 			user.setFollowingCount(following);
+			user.setFollowStatus(follows);
 		}
 		
 		return user;

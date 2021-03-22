@@ -196,7 +196,7 @@ public class ControlServlet extends HttpServlet {
 	}
 	
 	public void loadCommunityPage(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
-		List<User> userList = userDAO.getUsers("");
+		List<User> userList = userDAO.getUsers("", (String) request.getSession().getAttribute("username"));
 		
 		request.setAttribute("userList", userList);
 		RequestDispatcher rd = request.getRequestDispatcher("CommunityPage.jsp");
@@ -206,7 +206,7 @@ public class ControlServlet extends HttpServlet {
 	
 	public void getSearchedUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		String name = request.getParameter("search-field");
-		List<User> userList = userDAO.getUsers(name);
+		List<User> userList = userDAO.getUsers(name, (String) request.getSession().getAttribute("username"));
 		
 		request.setAttribute("userList", userList);
 		RequestDispatcher rd = request.getRequestDispatcher("CommunityPage.jsp");
@@ -279,7 +279,7 @@ public class ControlServlet extends HttpServlet {
 	private void viewProfile(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
 		String username = (String) request.getSession().getAttribute("username");
 		String targetUser = request.getParameter("target-user");
-		User userProfile = userDAO.getUser(targetUser);
+		User userProfile = userDAO.getUser(targetUser, username);
 		
 		boolean isFollowing = interaction.isFollowing(targetUser, username);
 		userProfile.setFollowStatus(isFollowing);
@@ -295,8 +295,15 @@ public class ControlServlet extends HttpServlet {
 		
 		interaction.insertFollow(targetUser, username);
 		
-		RequestDispatcher rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
-		rd.forward(request, response);
+		RequestDispatcher rd;
+		String referer = request.getHeader("Referer");
+		
+		if (referer.contains("community"))
+			response.sendRedirect("community");
+		else {
+			rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
+			rd.forward(request, response);
+		}
 	}
 	
 	private void unfollowUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
@@ -305,8 +312,15 @@ public class ControlServlet extends HttpServlet {
 		
 		interaction.deleteFollow(targetUser, username);
 		
-		RequestDispatcher rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
-		rd.forward(request, response);
+		RequestDispatcher rd;
+		String referer = request.getHeader("Referer");
+		
+		if (referer.contains("community"))
+			response.sendRedirect("community");
+		else {
+			rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
+			rd.forward(request, response);
+		}
 	}
 }
 
