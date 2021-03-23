@@ -21,7 +21,7 @@
 			<span style="color:red">${likeError}</span>
 			<c:forEach items="${imageList}" var="image">
 				<div class="postHeader">
-					<p id="postUser">${image.getPostUser()}: ${image.getDescription()}</p>
+					<p id="postUser">${image.getPostUser()}: ${image.getDescription()} Tags: ${image.getTags().toString()}</p>
 					<p id="postedAt">${image.getPostedAt()}</p>
 				</div>
 				<br>

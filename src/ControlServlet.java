@@ -298,7 +298,7 @@ public class ControlServlet extends HttpServlet {
 		RequestDispatcher rd;
 		String referer = request.getHeader("Referer");
 		
-		if (referer.contains("community"))
+		if (referer.contains("community") || referer.contains("search"))
 			response.sendRedirect("community");
 		else {
 			rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
@@ -315,7 +315,7 @@ public class ControlServlet extends HttpServlet {
 		RequestDispatcher rd;
 		String referer = request.getHeader("Referer");
 		
-		if (referer.contains("community"))
+		if (referer.contains("community") || referer.contains("search"))
 			response.sendRedirect("community");
 		else {
 			rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
