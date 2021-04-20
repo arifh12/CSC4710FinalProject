@@ -41,6 +41,19 @@ public class ImageDAO {
 		return insertedImage;
 	}
 	
+	public int checkDailyLimit(String username) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "select count(*) from image where date(posted_at) = date(now()) and post_user='" +username+ "';";
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		int dailyPosts = 0;
+		if(rs.next())
+			dailyPosts = rs.getInt(1);
+		
+		return dailyPosts;
+	}
+	
 	public Image getImage(int id) throws SQLException {
 		Image img = null;
 		String sql = "select * from image where image_id = ?;";
@@ -93,6 +106,8 @@ public class ImageDAO {
 			Image img = new Image(id, url, description, postedAt, postUser);
 			img.setTags(tags);
 			img.setLikes(likes);
+			img.setComments(getCommentsList(id));
+			img.setCommentStatus(img.getComments().stream().filter(c -> c.contains(username)).findFirst().isPresent());			
 			images.add(img);
 		}
 		
@@ -166,7 +181,22 @@ public class ImageDAO {
 		if(resultSet.next())
 			return resultSet.getInt(1);
 		else
-			return -1;
+			return 0;
+	}
+	
+	public ArrayList<String> getCommentsList(int id) throws SQLException {
+		String sql = "select username, message from comments where image_id=" + id +";";
+		conn = DBConnector.getConnection();
+		Statement statement = conn.createStatement();
+		ResultSet resultSet = statement.executeQuery(sql);
+		ArrayList<String> commentList = new ArrayList<>();
+		
+		while(resultSet.next()) {
+			String comment = resultSet.getString("username") + ": " + resultSet.getString("message");
+			commentList.add(comment);
+		}
+		
+		return commentList;
 	}
 }
 

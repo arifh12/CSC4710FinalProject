@@ -22,6 +22,7 @@ public class ControlServlet extends HttpServlet {
 	private InitializeDB db;
 	private ImageDAO imageDAO;
 	private Interaction interaction;
+	private RootControls rootControls;
 	private final String USER_ROOT = "root";
 	private final String PASS_ROOT = "pass1234";
 	
@@ -30,6 +31,7 @@ public class ControlServlet extends HttpServlet {
 		db = new InitializeDB();
 		imageDAO = new ImageDAO();
 		interaction = new Interaction();
+		rootControls = new RootControls();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -89,6 +91,12 @@ public class ControlServlet extends HttpServlet {
 			case "/unfollow":
 				unfollowUser(request, response);
 				break;
+			case "/insert-comment":
+				insertComment(request, response);
+				break;
+			case "/delete-comment":
+				deleteComment(request, response);
+				break;
 			default:
 				System.out.println("error");
 			}
@@ -96,14 +104,15 @@ public class ControlServlet extends HttpServlet {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	private void processLogin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		RequestDispatcher rd;
 		
 		if(username.equalsIgnoreCase(USER_ROOT) && password.equals(PASS_ROOT)) {
-			rd = request.getRequestDispatcher("Initialization.jsp");
+			setRootPageInfo(request, response);
+			rd = request.getRequestDispatcher("RootPage.jsp");
 		} 
 		else if (userDAO.login(username, password)) {
 			request.getSession().setAttribute("username", username);
@@ -116,7 +125,7 @@ public class ControlServlet extends HttpServlet {
 			
 		rd.forward(request, response);
 	}
-	
+
 	private void processRegister(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String firstName = request.getParameter("fname");
 		String lastName = request.getParameter("lname");
@@ -188,8 +197,15 @@ public class ControlServlet extends HttpServlet {
 			img.setPostUser(username);
 			img.setPostedAt(postedAt);
 		
-			imageDAO.insert(img);
-			rd = request.getRequestDispatcher("/feed");
+			if (imageDAO.checkDailyLimit(username) < 5) {
+				imageDAO.insert(img);
+				rd = request.getRequestDispatcher("/feed");
+			}
+			else {
+				request.setAttribute("errorNewPost", "Daily post limit reached!");
+				rd = request.getRequestDispatcher("NewPostForm.jsp");
+			}
+			
 		}
 		
 		rd.forward(request, response);	
@@ -321,6 +337,33 @@ public class ControlServlet extends HttpServlet {
 			rd = request.getRequestDispatcher("profile?target-user=" + targetUser);
 			rd.forward(request, response);
 		}
+	}
+	
+	private void deleteComment(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		int imageId = Integer.parseInt(request.getParameter("image-id"));
+		
+		interaction.deleteComment(username, imageId);
+		response.sendRedirect("feed");
+	}
+	
+	private void insertComment(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		int imageId = Integer.parseInt(request.getParameter("image-id"));
+		String message = (String) request.getParameter("message");
+		
+		interaction.insertComment(username, imageId, message);
+		response.sendRedirect("feed");
+	}
+	
+	private void setRootPageInfo(HttpServletRequest request, HttpServletResponse response) throws SQLException {
+		request.setAttribute("coolImages", rootControls.getCoolImages());  //1
+		request.setAttribute("newImages", rootControls.getNewImages()); //2
+		request.setAttribute("viralImages", rootControls.getViralImages()); //3
+		
+		request.setAttribute("topTags", rootControls.getTopTags()); //7
+		
+		request.setAttribute("poorImages", rootControls.getPoorImages()); //9
 	}
 }
 

@@ -22,22 +22,37 @@
 			<c:forEach items="${imageList}" var="image">
 				<div class="postHeader">
 					<p id="postUser">${image.getPostUser()}: ${image.getDescription()} Tags: ${image.getTags().toString()}</p>
-					<p id="postedAt">${image.getPostedAt()}</p>
 				</div>
 				<br>
 				<p>
 					<img id="postImg" src="${image.getUrl()}" alt="Uh-oh. Something went wrong!" />
 				</p>
-				<p>
-					<label>Likes: ${image.getLikes()} </label>
-					<c:if test="${username eq image.getPostUser()}">
+				<p id="postedAt">${image.getPostedAt()}
+					<c:if test="${username eq image.getPostUser()}"> | 
 						<a href="delete?image-id=<c:out value='${image.getImageId()}'/>" >Delete</a>
 						<a href="edit?image-id=<c:out value='${image.getImageId()}'/>" >Edit</a>
 					</c:if>
 				</p>
 				<p>
+					<label>Likes: ${image.getLikes()} </label> | 
 					<a href="<c:out value="${image.getLikeStatus() ? 'unlike' : 'like'}" />?image-id=<c:out value='${image.getImageId()}'/>" ><c:out value="${image.getLikeStatus() ? 'Unlike' : 'Like'}" /></a>
 				</p>
+				<c:forEach items="${image.getComments()}" var="comment">
+					<p>
+						${comment} 
+						<c:if test="${comment.contains(username)}">
+							<a href="delete-comment?image-id=<c:out value='${image.getImageId()}'/>" >Delete</a>
+							<a href="edit-comment?image-id=<c:out value='${image.getImageId()}'/>" >Edit</a>
+						</c:if>
+					</p>
+				</c:forEach>
+				<c:if test="${not image.getCommentStatus()}">
+					<form action="insert-comment" method="post">
+						<input type="hidden" name="image-id" value="${image.getImageId()}">
+						<input type="text" name="message" placeholder="Add a comment..."/>
+						<input type="submit" value="Comment"/> 
+					</form>
+				</c:if>
 				<hr>
 			</c:forEach>
 			<p id="feedEnd">End of feed.</p>

@@ -104,6 +104,29 @@ public class Interaction {
 		
 		return ps.executeUpdate() > 0;
 	}
+	
+	public boolean deleteComment(String username, int imageId) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "delete from comments where username=? and image_id=?";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, username);
+		ps.setInt(2, imageId);
+		
+		return ps.executeUpdate() > 0;
+	}
+	
+	public boolean insertComment(String username, int imageId, String message) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "insert into comments(username, image_id, message) values(?,?,?);";
+		
+		ps = conn.prepareStatement(sql);
+		ps.setString(1, username);
+		ps.setInt(2, imageId);
+		ps.setString(3, message);
+		
+		return ps.executeUpdate() > 0;
+	}
 }
 
 

@@ -33,7 +33,11 @@
 			<td><input type="text" name=tags placeholder="separate, tags, like, this"/> </td>
 		</tr>
 		<tr>
-			<td><input type="submit" value="Post" /><span style="color: red">${errorNewPost}</span>
+			<td><input type="submit" value="Post" /></td>
+			<td><span style="color: red">${errorNewPost}</span></td>
+		</tr>
+		<tr>
+		</tr>
 	</table>
 	</div>
 	</form>

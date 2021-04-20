@@ -120,10 +120,6 @@ nav {
 	float: left;
 }
 
-#postedAt {
-	float: right;
-}
-
 #postImg {
 	max-width: 80%;
 	max-height: 80%;
