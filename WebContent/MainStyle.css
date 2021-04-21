@@ -11,6 +11,11 @@ body {
 	padding-bottom: 30px;
 }
 
+h2,h3	{
+	color:white;
+	text-align:center;
+}
+
 .loginDiv {
 	position: fixed; 
 	top : 50%; 
@@ -128,3 +133,4 @@ nav {
 #feedEnd {
 	margin: auto;
 }
+

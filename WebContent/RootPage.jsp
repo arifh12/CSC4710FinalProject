@@ -5,12 +5,18 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<style><%@include file="MainStyle.css"%></style>
 <title>Root User Page</title>
 </head>
 <body>
+<nav>
+		<img class="navLink" id="navLogo" src="https://www.sunsetwatchfamilycampground.com/wp-content/uploads/2019/10/Sunset-Logo-2.png" width="150"/>
+		<a class="navLink" href="LoginForm.jsp">Log Out</a>
+	</nav>
+	
 	<h3>Click the button below to initialize the database</h3>
 	<form action="initialize" method="post">
-		<input type="submit" value="Initialize Databse"/>
+		<input type="submit" value="Initialize Database"/>
 	</form>
 	<hr>
 	
