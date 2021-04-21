@@ -14,12 +14,12 @@
 		<a class="navLink" href="LoginForm.jsp">Log Out</a>
 	</nav>
 	
+	<div class="feedDiv">
 	<h3>Click the button below to initialize the database</h3>
 	<form action="initialize" method="post">
 		<input type="submit" value="Initialize Database"/>
 	</form>
 	<hr>
-	
 	<h2>1. Cool Images</h2>
 		<table align="center" width="80%" border="1">
   			<tr>
@@ -208,5 +208,6 @@
   				</tr>
   			</c:forEach>
 		</table>
+		</div>
 </body>
 </html>
