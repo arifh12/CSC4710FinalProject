@@ -2,12 +2,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Interaction {
 	Connection conn = null;
 	PreparedStatement ps = null;
 	ResultSet rs = null;
+	Statement st = null;
 	
 	public ArrayList<Integer> getUserLikesList(String username) throws SQLException {
 		conn = DBConnector.getConnection();
@@ -127,6 +129,27 @@ public class Interaction {
 		
 		return ps.executeUpdate() > 0;
 	}
+	
+	public String getComment(int imageId, String username) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "select message from comments where image_id=" + imageId + " and username='" + username + "';";
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		if (rs.next())
+			return rs.getString("message");
+		
+		return null;
+	}
+
+	public void updateComment(int imageId, String username, String message) throws SQLException {
+		conn = DBConnector.getConnection();
+		String sql = "update comments "
+				+ "set message='" + message + "' "
+				+ "where username='" + username + "' and image_id=" + imageId + ";";
+		st = conn.createStatement();
+		st.executeUpdate(sql);
+	} 
 }
 
 

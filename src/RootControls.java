@@ -22,7 +22,7 @@ public class RootControls {
 		userDAO = new UserDAO();
 	}
 	
-	public List<Image> getCoolImages() throws SQLException {
+	public List<Image> getCoolImages() throws SQLException { //1
 		conn = DBConnector.getConnection();
 		List<Image> coolImages = new ArrayList<>();
 		String sql = "select image_id, url, count(*) "
@@ -46,7 +46,7 @@ public class RootControls {
 		return coolImages;
 	}
 	
-	public List<Image> getNewImages() throws SQLException {
+	public List<Image> getNewImages() throws SQLException { //2
 		conn = DBConnector.getConnection();
 		List<Image> newImages = new ArrayList<>();
 		String sql = "SELECT image_id, url, posted_at FROM image WHERE DATE(posted_at) = curdate();";
@@ -67,7 +67,7 @@ public class RootControls {
 		return newImages;
 	}
 	
-	public List<Image> getViralImages() throws SQLException {
+	public List<Image> getViralImages() throws SQLException { //3
 		conn = DBConnector.getConnection();
 		List<Image> viralImages = new ArrayList<>();
 		String sql = "select image_id, url, count(*) as total "
@@ -92,7 +92,78 @@ public class RootControls {
 		return viralImages;
 	}
 	
-	public Map<String, Integer> getTopTags() throws SQLException {
+	public Map<String, Integer> getTopUsers() throws SQLException { //5
+		conn = DBConnector.getConnection();
+		Map<String, Integer> topUsers = new HashMap<>();
+		String sql = "select post_user,  count(image_id) "
+				+ "from image "
+				+ "group by post_user "
+				+ "having count(*) = ( "
+				+ "	select count(image_id) "
+				+ "	from image "
+				+ "	group by post_user "
+				+ "    order by count(image_id) desc "
+				+ "    limit 1 "
+				+ ");";
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		while (rs.next()) {
+			String username = rs.getString("post_user");
+			int posts  = rs.getInt("count(image_id)");
+			
+			topUsers.put(username, posts);
+		}
+		
+		return topUsers; 
+	}
+	
+	public List<User> getPopularUsers() throws SQLException { //5
+		conn = DBConnector.getConnection();
+		List<User> popularUsers = new ArrayList<>();
+		String sql = "select following_username, count(*) "
+				+ "from follows "
+				+ "group by following_username "
+				+ "having count(*) >= 5";
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		while (rs.next()) {
+			User user;
+			String username = rs.getString("following_username");
+			int followers = rs.getInt("count(*)");
+			
+			user = new User(username);
+			user.setFollowerCount(followers);
+			popularUsers.add(user);
+		}
+		
+		return popularUsers; 
+	}
+	
+	public List<String> getCommonUsers(String userX, String userY) throws SQLException { //6
+		conn = DBConnector.getConnection();
+		List<String> commonUsers = new ArrayList<>();
+		String sql = "select following_username "
+				+ "from follows "
+				+ "where follower_username = '" + userX + "' and following_username in ( "
+				+ "	select following_username "
+				+ "	from follows "
+				+ "	where follower_username = '" + userY + "'"
+				+ ");";
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		while (rs.next()) {
+			String username = rs.getString("following_username");
+			
+			commonUsers.add(username);
+		}
+		
+		return commonUsers;
+	}
+	
+	public Map<String, Integer> getTopTags() throws SQLException { //7
 		conn = DBConnector.getConnection();
 		Map<String, Integer> topTags = new HashMap<>();
 		String sql = "select tag, count(distinct(post_user)) as count "
@@ -113,7 +184,34 @@ public class RootControls {
 		return topTags;
 	}
 	
-	public List<Image> getPoorImages() throws SQLException {
+	public Map<String, Integer> getPositiveUsers() throws SQLException { //8
+		conn = DBConnector.getConnection();
+		Map<String, Integer> positiveUsers = new HashMap<>();
+		String sql = "select username, count(*) "
+				+ "from likes l\r\n"
+				+ "left join image i on l.image_id = i.image_id "
+				+ "where username <> post_user "
+				+ "group by username "
+				+ "having count(*) = ( "
+				+ "	select count(*) "
+				+ "    from follows f "
+				+ "    join image i2 on f.following_username = i2.post_user "
+				+ "    where f.follower_username = l.username "
+				+ ");";
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		while (rs.next()) {
+			String username = rs.getString("username");
+			int likes  = rs.getInt("count(*)");
+			
+			positiveUsers.put(username, likes);
+		}
+		
+		return positiveUsers; 
+	}
+	
+	public List<Image> getPoorImages() throws SQLException { //9
 		conn = DBConnector.getConnection();
 		List<Image> poorImages = new ArrayList<>();
 		String sql = "select image_id, url, post_user "
@@ -138,6 +236,40 @@ public class RootControls {
 		}
 		
 		return poorImages;
+	}
+	
+	public List<User> getInactiveUsers() throws SQLException { //10
+		conn = DBConnector.getConnection();
+		List<User> inactiveUsers = new ArrayList<>();
+		String sql = "select distinct username, first_name, last_name "
+				+ "from user "
+				+ "where username not in ( "
+				+ "(select post_user "
+				+ "    from image "
+				+ ") union ( "
+				+ "	select follower_username "
+				+ "    from follows "
+				+ ") union ( "
+				+ "	select username "
+				+ "    from likes "
+				+ ") union ( "
+				+ "	select username "
+				+ "    from comments) "
+				+ ");";
+		st = conn.createStatement();
+		rs = st.executeQuery(sql);
+		
+		while (rs.next()) {
+			User user;
+			String username = rs.getString("username");
+			String firstName = rs.getString("first_name");
+			String lastName = rs.getString("last_name");
+			
+			user = new User(username, firstName, lastName);
+			inactiveUsers.add(user);
+		}
+		
+		return inactiveUsers;
 	}
 
 }

@@ -97,6 +97,15 @@ public class ControlServlet extends HttpServlet {
 			case "/delete-comment":
 				deleteComment(request, response);
 				break;
+			case "/edit-comment":
+				showEditCommentForm(request, response);
+				break;
+			case "/common-users":
+				getCommonUsers(request, response);
+				break;
+			case "/update-comment":
+				updateComment(request, response);
+				break;
 			default:
 				System.out.println("error");
 			}
@@ -356,15 +365,54 @@ public class ControlServlet extends HttpServlet {
 		response.sendRedirect("feed");
 	}
 	
+	private void showEditCommentForm(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		int imageId = Integer.parseInt(request.getParameter("image-id"));
+		String username = (String) request.getSession().getAttribute("username");
+		String message = interaction.getComment(imageId, username);
+		
+		request.setAttribute("message", message);
+		request.setAttribute("imageId", imageId);
+		RequestDispatcher rd = request.getRequestDispatcher("EditCommentForm.jsp");
+		rd.forward(request, response);
+	}
+	
+
+	private void updateComment(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+		String username = (String) request.getSession().getAttribute("username");
+		String message = request.getParameter("message");
+		int imageId = Integer.parseInt(request.getParameter("image-id"));
+		
+		interaction.updateComment(imageId, username, message);
+		
+		response.sendRedirect("feed");
+	}
+	
 	private void setRootPageInfo(HttpServletRequest request, HttpServletResponse response) throws SQLException {
 		request.setAttribute("coolImages", rootControls.getCoolImages());  //1
 		request.setAttribute("newImages", rootControls.getNewImages()); //2
 		request.setAttribute("viralImages", rootControls.getViralImages()); //3
-		
+		request.setAttribute("topUsers", rootControls.getTopUsers()); //4
+		request.setAttribute("popularUsers", rootControls.getPopularUsers()); //5		
+		request.setAttribute("userList", userDAO.getUsers("", "")); //6
 		request.setAttribute("topTags", rootControls.getTopTags()); //7
-		
+		request.setAttribute("positiveUsers", rootControls.getPositiveUsers()); //8
 		request.setAttribute("poorImages", rootControls.getPoorImages()); //9
+		request.setAttribute("inactiveUsers", rootControls.getInactiveUsers()); //10
 	}
+	
+	private void getCommonUsers(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
+		String userX = request.getParameter("userX");
+		String userY = request.getParameter("userY");
+		
+		request.setAttribute("commonUsers", rootControls.getCommonUsers(userX, userY));
+		request.setAttribute("showUserX", userX);
+		request.setAttribute("showUserY", userY);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("RootPage.jsp");
+		setRootPageInfo(request, response);
+		rd.forward(request, response);
+	}
+
 }
 
 

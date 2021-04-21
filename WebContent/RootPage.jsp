@@ -13,6 +13,7 @@
 		<input type="submit" value="Initialize Databse"/>
 	</form>
 	<hr>
+	
 	<h2>1. Cool Images</h2>
 		<table align="center" width="80%" border="1">
   			<tr>
@@ -28,6 +29,7 @@
   				</tr>
   			</c:forEach>
 		</table>
+		
 	<h2>2. New Images</h2>
 		<table align="center" width="80%" border="1">
   			<tr>
@@ -43,6 +45,7 @@
   				</tr>
   			</c:forEach>
 		</table>
+		
 	<h2>3. Viral Images</h2>
 		<table align="center" width="80%" border="1">
   			<tr>
@@ -58,16 +61,87 @@
   				</tr>
   			</c:forEach>
 		</table>
+		
 	<h2>4. Top Users</h2>
-		<c:forEach items="${topUsers}" var="user">
-			${user.getUsername()}
-		</c:forEach>
+		<table align="center" width="80%" border="1">
+  			<tr>
+    			<th>Username</th>
+    			<th>Posts</th>
+  			</tr>
+  			<c:forEach items="${topUsers}" var="user">
+  				<tr align="center">
+    				<td>${user.key}</td>
+    				<td>${user.value}</td>
+  				</tr>
+  			</c:forEach>
+		</table>
+		
 	<h2>5. Popular Users</h2>
-		<c:forEach items="${popularUsers}" var="user">
-			${user.getUsername()}
-		</c:forEach>
+		<table align="center" width="80%" border="1">
+  			<tr>
+    			<th>Username</th>
+    			<th>Followers</th>
+  			</tr>
+  			<c:forEach items="${popularUsers}" var="user">
+  				<tr align="center">
+    				<td>${user.getUsername()}</td>
+    				<td>${user.getFollowerCount()}</td>
+  				</tr>
+  			</c:forEach>
+		</table>
+		
 	<h2>6. Common Users</h2>
-		${testing}
+		<form action="common-users" method="post">
+		<table align="center" width="80%">
+  			<tr align="center">
+    			<th>User X</th>
+    			<th></th>
+    			<th>User Y</th>
+  			</tr>
+  			<tr align="center">
+  				<td>
+  					<select name="userX" >
+            			<option value=""></option>
+            			<c:forEach items="${userList}" var="user">
+  							<option value="${user.getUsername()}">${user.getUsername()}</option>
+  						</c:forEach>
+					</select>
+  				</td>
+  				<td></td>
+  				<td>
+  					<select name="userY" >
+            			<option value=""></option>
+            			<c:forEach items="${userList}" var="user">
+  							<option value="${user.getUsername()}">${user.getUsername()}</option>
+  						</c:forEach>
+					</select>
+  				</td>
+  			</tr>
+  			<tr align="center">
+    			<td>${showUserX}</td>
+    			<td></td>
+    			<td>${showUserY}</td>
+  			</tr>
+  			<tr align="center">
+  				<td></td>
+  				<td><input type="submit" value="Search"/></td>
+  				<td></td>
+  			</tr>
+		</table>
+		</form>
+		<br>
+		<c:if test="${not empty commonUsers}">
+		<table align="center" width="25%" border="1">
+  			<tr>
+    			<th>Username</th>
+  			</tr>
+  			<c:forEach items="${commonUsers}" var="user">
+  				<tr align="center">
+    				<td>${user}</td>
+  				</tr>
+  			</c:forEach>
+		</table>
+		</c:if>
 		
 	<h2>7. Top Tags</h2>
 		<table align="center" width="80%" border="1">
@@ -82,10 +156,21 @@
   				</tr>
   			</c:forEach>
 		</table>
+		
 	<h2>8. Positive Users</h2>
-		<c:forEach items="${positiveUsers}" var="user">
-			${user.getUsername()}
-		</c:forEach>
+		<table align="center" width="80%" border="1">
+  			<tr>
+    			<th>Username</th>
+    			<th>Likes</th>
+  			</tr>
+  			<c:forEach items="${positiveUsers}" var="user">
+  				<tr align="center">
+    				<td>${user.key}</td>
+    				<td>${user.value}</td>
+  				</tr>
+  			</c:forEach>
+		</table>
+		
 	<h2>9. Poor Images</h2>
 		<table align="center" width="80%" border="1">
   			<tr>
@@ -101,9 +186,21 @@
   				</tr>
   			</c:forEach>
 		</table>
+		
 	<h2>10. Inactive Users</h2>
-		<c:forEach items="${inactiveUsers}" var="user">
-			${user.getUsername()}
-		</c:forEach>
+		<table align="center" width="80%" border="1">
+  			<tr>
+    			<th>Username</th>
+    			<th>First Name</th>
+    			<th>Last Name</th>
+  			</tr>
+  			<c:forEach items="${inactiveUsers}" var="user">
+  				<tr align="center">
+    				<td>${user.getUsername()}</td>
+    				<td>${user.getFirstName()}</td>
+    				<td>${user.getLastName()}</td>
+  				</tr>
+  			</c:forEach>
+		</table>
 </body>
 </html>
