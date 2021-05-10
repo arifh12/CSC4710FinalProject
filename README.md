@@ -10,7 +10,8 @@ This is a Java web application that mimics the functionalities of a social media
  - Search for users and view their profiles
  - View a feed page which displays all the posts from people the user follows
  - Like/unlike posts (daily like limit: 3)
- - Add/edit/delete a comment
+ - Add/edit/delete a comment  
+
 The root user of the site has access to a page displaying all the data analytics, such as most followed users, most used tags, inactive users, etc. The root user may also initialize the database any point to reset all the data to their initial states. To view this page, you must log in using the username, root, and the password, pass1234.
 
 **To Run (on Eclipse):** 
